@@ -1,0 +1,118 @@
+# Golden retrieval set.
+#
+# Every `contains` string below was verified to exist in the parsed corpus before
+# being written here — a golden set with wrong answers measures nothing.
+#
+# A retrieved chunk counts as a hit when its source paper matches `paper` AND its
+# text contains any string in `contains` (case-insensitive). `kind` is only used
+# to break the report down by question type.
+
+- q: What dropout rate did AlexNet use in its fully-connected layers?
+  paper: NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1
+  contains: ["0.5", "dropout"]
+  kind: factual
+
+- q: How many parameters does AlexNet have?
+  paper: NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1
+  contains: ["60 million"]
+  kind: factual
+
+- q: Why does AlexNet use ReLU instead of tanh?
+  paper: NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1
+  contains: ["ReLU"]
+  kind: conceptual
+
+- q: What BLEU score did the big Transformer reach on WMT 2014 English-to-German?
+  paper: 1706.03762v7
+  contains: ["28.4"]
+  kind: table
+
+- q: What BLEU score did the Transformer reach on English-to-French?
+  paper: 1706.03762v7
+  contains: ["41.8"]
+  kind: table
+
+- q: What optimiser and learning rate schedule trained the Transformer?
+  paper: 1706.03762v7
+  contains: ["warmup_steps", "Adam"]
+  kind: factual
+
+- q: What is the model dimension of the base Transformer?
+  paper: 1706.03762v7
+  contains: ["dmodel = 512", "512"]
+  kind: factual
+
+- q: How deep was the deepest ResNet evaluated on ImageNet?
+  paper: 1512.03385
+  contains: ["152 layers"]
+  kind: factual
+
+- q: What top-5 error did ResNet achieve on the ImageNet test set?
+  paper: 1512.03385
+  contains: ["3.57"]
+  kind: table
+
+- q: What is the degradation problem in deep networks?
+  paper: 1512.03385
+  contains: ["degradation"]
+  kind: conceptual
+
+- q: What are the default beta1 and beta2 values recommended for Adam?
+  paper: 1412.6980
+  contains: ["0.999", "0.9"]
+  kind: math
+
+- q: What epsilon does Adam use by default?
+  paper: 1412.6980
+  contains: ["10−8"]
+  kind: math
+
+- q: What problem does batch normalization address?
+  paper: 1502.03167
+  contains: ["internal covariate shift"]
+  kind: conceptual
+
+- q: How much faster did batch normalization train the network?
+  paper: 1502.03167
+  contains: ["14 times"]
+  kind: factual
+
+- q: What percentage of tokens does BERT mask during pre-training?
+  paper: 1810.04805
+  contains: ["15%"]
+  kind: factual
+
+- q: What tokenizer does BERT use?
+  paper: 1810.04805
+  contains: ["WordPiece"]
+  kind: factual
+
+- q: How many parameters does GPT-3 have?
+  paper: 2005.14165
+  contains: ["175 billion", "175B"]
+  kind: factual
+
+- q: What pre-training dataset does the Vision Transformer rely on for best results?
+  paper: 2010.11929v2
+  contains: ["JFT"]
+  kind: factual
+
+- q: How many times fewer trainable parameters does LoRA use than full fine-tuning?
+  paper: 2106.09685
+  contains: ["10,000 times"]
+  kind: factual
+
+- q: What is the minimax objective in a generative adversarial network?
+  paper: 1406.2661
+  contains: ["minimax"]
+  kind: conceptual
+
+- q: What BLEU score did the LSTM sequence-to-sequence model reach on WMT 14?
+  paper: 1409.3215
+  contains: ["34.8"]
+  kind: factual
+
+- q: Why does reversing the source sentence help sequence-to-sequence learning?
+  paper: 1409.3215
+  contains: ["reversing", "revers"]
+  kind: conceptual

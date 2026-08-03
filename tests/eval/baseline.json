@@ -1,0 +1,44 @@
+{
+  "mode": "offline",
+  "health": {
+    "chunks": 883,
+    "papers": 12,
+    "hyphen_breaks": 1051,
+    "reference_chunks": 0,
+    "starts_mid_sentence": 470,
+    "orphan_chunks": 13,
+    "size_mean": 1052,
+    "size_median": 1206,
+    "size_max": 1330,
+    "content_types": {
+      "prose": 883
+    }
+  },
+  "recall@8": 0.273,
+  "mrr": 0.182,
+  "hits": "6/22",
+  "by_kind": {
+    "conceptual": "1/5",
+    "factual": "3/12",
+    "math": "0/2",
+    "table": "2/3"
+  },
+  "misses": [
+    "How many parameters does AlexNet have?",
+    "What is the model dimension of the base Transformer?",
+    "How deep was the deepest ResNet evaluated on ImageNet?",
+    "What top-5 error did ResNet achieve on the ImageNet test set?",
+    "What is the degradation problem in deep networks?",
+    "What are the default beta1 and beta2 values recommended for Adam?",
+    "What epsilon does Adam use by default?",
+    "What problem does batch normalization address?",
+    "How much faster did batch normalization train the network?",
+    "What percentage of tokens does BERT mask during pre-training?",
+    "What tokenizer does BERT use?",
+    "How many parameters does GPT-3 have?",
+    "How many times fewer trainable parameters does LoRA use than full fine-tuning?",
+    "What is the minimax objective in a generative adversarial network?",
+    "What BLEU score did the LSTM sequence-to-sequence model reach on WMT 14?",
+    "Why does reversing the source sentence help sequence-to-sequence learning?"
+  ]
+}
