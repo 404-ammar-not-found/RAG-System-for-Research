@@ -1,0 +1,3262 @@
+{
+  "nodes": [
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-0",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Attention Is All You Need\n\nAshish Vaswani\u2217\nGoogle Brain\navaswani@google.com\nNoam Shazeer\u2217\nGo\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Attention Is All You Need",
+      "paper_title": "Attention Is All You Need",
+      "page": 0
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-1",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Abstract\n\nThe dominant sequence transduction models are based on complex recurrent or\nconvol\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Abstract",
+      "paper_title": "Attention Is All You Need",
+      "page": 0
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-2",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Abstract\n\nother tasks by applying it successfully to English constituency parsing both with\n\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Abstract",
+      "paper_title": "Attention Is All You Need",
+      "page": 0
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-3",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Abstract\n\n\u2021Work performed while at Google Research.\n31st Conference on Neural Information Pr\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Abstract",
+      "paper_title": "Attention Is All You Need",
+      "page": 0
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-4",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Introduction\n\nRecurrent neural networks, long short-term memory [13] and gated recurrent [7]\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Introduction",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-5",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Introduction\n\nconstraint of sequential computation, however, remains.\nAttention mechanisms h\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Introduction",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-6",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Background\n\nThe goal of reducing sequential computation also forms the foundation of the Ext\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Background",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-7",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Background\n\nused successfully in a variety of tasks including reading comprehension, abstrac\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Background",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-8",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (1)\n\nMost competitive neural sequence transduction models have an encoder\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-9",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (1)\n\nthe two sub-layers, followed by layer normalization [1]. That is, th\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-10",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (1)\n\n3.2\nAttention\nAn attention function can be described as mapping a qu\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-11",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (1)\n\nthe matrix of outputs as:\nAttention(Q, K, V ) = softmax(QKT\n\u221adk\n)V\n(\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-12",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (2)\n\nge in magnitude, pushing the softmax function into regions where it \u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-13",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (2)\n\nsubspaces at different positions. With a single attention head, aver\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-14",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (2)\n\n[38, 2, 9].\n\u2022 The encoder contains self-attention layers. In a self-\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-15",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (2)\n\nconsists of two linear transformations with a ReLU activation in bet\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-16",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (3)\n\ny \u221admodel.\n5\nTable 1: Maximum path lengths, per-layer complexity and\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (3)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-17",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model Architecture (3)\n\nlearned and fixed [9].\nIn this work, we use sine and cosine function\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model Architecture (3)",
+      "paper_title": "Attention Is All You Need",
+      "page": 1
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-18",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Why Self-Attention\n\nIn this section we compare various aspects of self-attention layers to t\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Why Self-Attention",
+      "paper_title": "Attention Is All You Need",
+      "page": 5
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-19",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Why Self-Attention\n\nthe maximum path length between any two input and output positions in ne\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Why Self-Attention",
+      "paper_title": "Attention Is All You Need",
+      "page": 5
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-20",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Why Self-Attention\n\nA single convolutional layer with kernel width k < n does not connect al\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Why Self-Attention",
+      "paper_title": "Attention Is All You Need",
+      "page": 5
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-21",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Training\n\nThis section describes the training regime for our models.\n5.1\nTraining Data and B\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Training",
+      "paper_title": "Attention Is All You Need",
+      "page": 6
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-22",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Training\n\nbottom line of table 3), step time was 1.0 seconds. The big models were trained fo\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Training",
+      "paper_title": "Attention Is All You Need",
+      "page": 6
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-23",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Model\n\nBLEU\nTraining Cost (FLOPs)\nEN-DE\nEN-FR\nEN-DE\nEN-FR\nByteNet [18]\n23.75\nDeep-Att + PosU\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Model",
+      "paper_title": "Attention Is All You Need",
+      "page": 7
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-24",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Results (1)\n\n6.1\nMachine Translation\nOn the WMT 2014 English-to-German translation task, the\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Results (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 7
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-25",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Results (1)\n\nused beam search with a beam size of 4 and length penalty \u03b1 = 0.6 [38]. These h\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Results (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 7
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-26",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Results (1)\n\nmodel. All metrics are on the English-to-German translation development set, ne\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Results (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 7
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-27",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Results (1)\n\nkeeping the amount of computation constant, as described in Section 3.2.2. Whil\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Results (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 7
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-28",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Results (2)\n\nsents specific challenges: the output is subject to strong structural\nconstrain\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Results (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 7
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-29",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Results (2)\n\nof WSJ)\nParser\nTraining\nWSJ 23 F1\nVinyals & Kaiser el al. (2014) [37]\nWSJ only,\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Results (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 7
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-30",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Conclusion\n\nIn this work, we presented the Transformer, the first sequence transduction mode\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Conclusion",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-31",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Acknowledgements\n\nWe are grateful to Nal Kalchbrenner and Stephan Gouws for their fruitful\nc\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Acknowledgements",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-32",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 References (1)\n\n[1] Jimmy Lei Ba, Jamie Ryan Kiros, and Geoffrey E Hinton. Layer normalizati\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "References (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-33",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 References (1)\n\n[8] Chris Dyer, Adhiguna Kuncoro, Miguel Ballesteros, and Noah A. Smith. Rec\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "References (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-34",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 References (1)\n\nacross languages. In Proceedings of the 2009 Conference on Empirical Methods\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "References (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-35",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 References (1)\n\n[21] Oleksii Kuchaiev and Boris Ginsburg. Factorization tricks for LSTM netw\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "References (1)",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-36",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 References (2)\n\nne Charniak, and Mark Johnson. Effective self-training for parsing. In\nProce\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "References (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-37",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 References (2)\n\n[32] Noam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "References (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-38",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 References (2)\n\n[37] Vinyals & Kaiser, Koo, Petrov, Sutskever, and Hinton. Grammar as a fore\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "References (2)",
+      "paper_title": "Attention Is All You Need",
+      "page": 9
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-39",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Attention Visualizations\n\nIt\nis\nin\nthis\nspirit\nthat\na\nmajority\nof\nAmerican\ngovernments\nhave\n\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Attention Visualizations",
+      "paper_title": "Attention Is All You Need",
+      "page": 12
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-40",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Attention Visualizations\n\nbe\nperfect\n,\nbut\nits\napplication\nshould\nbe\njust\n-\nthis\nis\nwhat\nwe\n\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Attention Visualizations",
+      "paper_title": "Attention Is All You Need",
+      "page": 12
+    },
+    {
+      "id": "1706.03762v7-bdfaa68d-chunk-41",
+      "kind": "chunk",
+      "label": "Attention Is All You Need \u2014 Attention Visualizations\n\nwhat\nwe\nare\nmissing\n,\nin\nmy\nopinion\n.\n<EOS>\n<pad>\nFigure 5: Many o\u2026",
+      "group": "data/1706.03762v7.pdf",
+      "section": "Attention Visualizations",
+      "paper_title": "Attention Is All You Need",
+      "page": 12
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-0",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Front matter\n\nPublished as a conference pap\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Front matter",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 0
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-1",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 0
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-2",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ABSTRACT\n\nWhile the Transformer architectur\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ABSTRACT",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 0
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-3",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 INTRODUCTION\n\nSelf-attention-based architec\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "INTRODUCTION",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 0
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-4",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 INTRODUCTION\n\nthe use of specialized attent\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "INTRODUCTION",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 0
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-5",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 INTRODUCTION\n\nat\nhttps://github.com/\ngoogle\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "INTRODUCTION",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 0
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-6",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 RELATED WORK (1)\n\nTransformers were propose\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "RELATED WORK (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 1
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-7",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 RELATED WORK (1)\n\nline of work, Sparse Tran\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "RELATED WORK (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 1
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-8",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 RELATED WORK (1)\n\nThere has also been a lot\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "RELATED WORK (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 1
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-9",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 RELATED WORK (1)\n\nthan the standard ImageNe\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "RELATED WORK (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 1
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-10",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 RELATED WORK (2)\n\nmbedding\nClass\nBird\nBall\n\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "RELATED WORK (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 1
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-11",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 METHOD (1)\n\nIn model design we follow the o\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "METHOD (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 2
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-12",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 METHOD (1)\n\nSimilar to BERT\u2019s [class] token\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "METHOD (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 2
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-13",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 METHOD (1)\n\n3\nPublished as a conference pap\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "METHOD (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 2
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-14",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 METHOD (1)\n\nfrom scratch.\nHybrid Architectu\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "METHOD (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 2
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-15",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 METHOD (2)\n\nard\nlayer, where K is the numbe\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "METHOD (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 2
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-16",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 EXPERIMENTS\n\nWe evaluate the representation\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "EXPERIMENTS",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 3
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-17",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 EXPERIMENTS\n\ndataset to several benchmark t\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "EXPERIMENTS",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 3
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-18",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Model (1)\n\nLayers\nHidden size D\nMLP size\nHe\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Model (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 4
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-19",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Model (1)\n\nthus models with smaller patch s\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Model (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 4
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-20",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Model (1)\n\nwe found to be useful for transf\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Model (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 4
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-21",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Model (1)\n\n\ufb01ne-tuning performance, we somet\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Model (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 4
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-22",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Model (2)\n\nores (2 per chip) used for train\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Model (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 4
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-23",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Model (2)\n\n99.63 \u00b1 0.03\n\u2212\nVTAB (19 tasks)\n7\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Model (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 4
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-24",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 Model (2)\n\nthat pre-training ef\ufb01ciency may \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "Model (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 4
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-25",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (1)\n\nFirst, we pre-train ViT m\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-26",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (1)\n\nWhile\nlarge ViT models pe\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-27",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (1)\n\ntational budget. Hybrids \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-28",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (1)\n\nfor ResNet152x2 and ViT-L\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-29",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (2)\n\n-trained for 7 epochs, pl\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-30",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (2)\n\nsince one might expect co\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-31",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (2)\n\nbeddings, i.e. closer pat\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-32",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (2)\n\nhave consistently small a\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-33",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 experiments. (3)\n\nr)\n0\n20\n40\n60\n80\n100\n120\n\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "experiments. (3)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 5
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-34",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 CONCLUSION\n\nWe have explored the direct app\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "CONCLUSION",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-35",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 CONCLUSION\n\npre-training, but there is stil\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "CONCLUSION",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-36",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ACKNOWLEDGEMENTS\n\nThe work was performed in\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ACKNOWLEDGEMENTS",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-37",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (1)\n\nSamira Abnar and Willem Zui\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-38",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (1)\n\nMark Chen, Alec Radford, Re\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-39",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (1)\n\nKolesnikov, Joan Puigcerver\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-40",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (1)\n\nOlivier J. H\u00b4enaff, Aravind\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-41",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (2)\n\n-\nlutional neural networks.\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-42",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (2)\n\nAshwin Bharambe, and Lauren\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-43",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (2)\n\nmodels are unsupervised mul\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-44",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (2)\n\nceedings of the IEEE/CVF Co\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-45",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (3)\n\ng Wang, Ross Girshick, Abhi\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (3)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-46",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 REFERENCES (3)\n\npreprint arXiv:1910.04867, \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "REFERENCES (3)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 8
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-47",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 MULTIHEAD SELF-ATTENTION\n\nStandard qkv self\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "MULTIHEAD SELF-ATTENTION",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 12
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-48",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 EXPERIMENT DETAILS (1)\n\nB.1\nTRAINING\nTable \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "EXPERIMENT DETAILS (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 12
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-49",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 EXPERIMENT DETAILS (1)\n\nDataset\nSteps\nBase \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "EXPERIMENT DETAILS (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 12
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-50",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 EXPERIMENT DETAILS (1)\n\ntarget dataset. We \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "EXPERIMENT DETAILS (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 12
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-51",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 EXPERIMENT DETAILS (1)\n\npredict the 3-bit, \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "EXPERIMENT DETAILS (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 12
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-52",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 EXPERIMENT DETAILS (2)\n\noption 1) because i\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "EXPERIMENT DETAILS (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 12
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-53",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL RESULTS\n\nWe report detailed resu\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL RESULTS",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 13
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-54",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL RESULTS\n\n88.04\nImageNet ReaL\n88.\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL RESULTS",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 13
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-55",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL RESULTS\n\n89.17\n94.08\n95.95\n96\nRe\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL RESULTS",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 13
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-56",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (1)\n\nD.1\nSGD VS. ADAM F\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-57",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (1)\n\nin Table 7. Adam p\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-58",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (1)\n\neffective sequence\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-59",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (1)\n\n16\nPublished as a \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (1)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-60",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (2)\n\nmation using posit\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-61",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (2)\n\ntention mechanism)\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-62",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (2)\n\n6\n7\n8\n9\n10 11 12 1\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-63",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (2)\n\ntant. More precise\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (2)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-64",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (3)\n\ntion weight. Each \u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (3)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-65",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (3)\n\nbetter for scaling\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (3)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-66",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (3)\n\ninstead of applyin\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (3)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-67",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (3)\n\nnumber of FLOPs an\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (3)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-68",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (4)\n\n3\nPeak inference s\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (4)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-69",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (4)\n\nthe average distan\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (4)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-70",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (4)\n\nD.10\nVTAB BREAKDOW\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (4)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "2010.11929v2-8ce7b839-chunk-71",
+      "kind": "chunk",
+      "label": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE \u2014 ADDITIONAL ANALYSES (4)\n\nViT-L/16 (JFT) 95.\u2026",
+      "group": "data/2010.11929v2.pdf",
+      "section": "ADDITIONAL ANALYSES (4)",
+      "paper_title": "AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE",
+      "page": 14
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-0",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 diverse set of variables\n\nEhsan Hoseinzade\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "diverse set of variables",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 0
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-1",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Abstract\n\nFeature extraction from \ufb01nancial\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Abstract",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 0
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-2",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Abstract\n\nalgorithms.\nKeywords:\nStock mark\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Abstract",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 0
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-3",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (1)\n\nFinancial markets are\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-4",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (1)\n\n15\nIn fact, without a\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-5",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (1)\n\nIn many domains,\n30\n2\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-6",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (1)\n\nket, exchange rates o\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-7",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (2)\n\nt possible choices fo\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-8",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (2)\n\nsio & Honchar, 2016).\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-9",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (2)\n\nWe develop our framew\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-10",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (2)\n\ntraction and market p\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-11",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 1. Introduction (3)\n\nlized variables in\nse\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "1. Introduction (3)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 1
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-12",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 2. Related works (1)\n\n110\nDi\ufb00erent methods\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "2. Related works (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 4
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-13",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 2. Related works (1)\n\n125\nlearning process\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "2. Related works (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 4
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-14",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 2. Related works (1)\n\nforest and naive Bay\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "2. Related works (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 4
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-15",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 2. Related works (1)\n\nof four and nine day\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "2. Related works (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 4
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-16",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 2. Related works (2)\n\nural networks that a\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "2. Related works (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 4
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-17",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 2. Related works (2)\n\n(Gunduz et al., 2017\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "2. Related works (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 4
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-18",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 3. Background\n\n195\nBefore presenting our s\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "3. Background",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 7
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-19",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Method\n\n(Kara et al., 2011)\nBorsa Istanbul\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Method",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 8
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-20",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Method\n\n210\n\ufb01lters are used. Then, input o\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Method",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 8
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-21",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Filter\n\nV1,1\n\u2026\n\u2026\nV1,E\n\u2026\n\u2026\n\u2026\n\u2026\n\u2026\n\u2026\n\u2026\n\u2026\nVE,1\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Filter",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 9
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-22",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Output\n\nE = N-F+1\nFigure 1: Applying \ufb01lter\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Output",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 9
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-23",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Output\n\nconverted to only one value. This \u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Output",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 9
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-24",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Output\n\n245\ntraining data. So, in each lea\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Output",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 9
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-25",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 4. Proposed CNN: CNNpred (1)\n\nCNN has many\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "4. Proposed CNN: CNNpred (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 11
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-26",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 4. Proposed CNN: CNNpred (1)\n\n2D-CNNpred a\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "4. Proposed CNN: CNNpred (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 11
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-27",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 4. Proposed CNN: CNNpred (1)\n\npredictions \u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "4. Proposed CNN: CNNpred (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 11
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-28",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 4. Proposed CNN: CNNpred (1)\n\ncan see all \u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "4. Proposed CNN: CNNpred (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 11
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-29",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 4. Proposed CNN: CNNpred (2)\n\nm this obser\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "4. Proposed CNN: CNNpred (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 11
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-30",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nmarket 1\nmarket k",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 13
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-31",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 2D-CNNpred\n\nfeatures\npast days",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "2D-CNNpred",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 13
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-32",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nDeep CNN\nPredicts market k\nmarkets\npast\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 13
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-33",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\n14\nprevious layers are converted to a o\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 13
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-34",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nthe number of variables that represent \u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 13
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-35",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Filter\n\nvt-1\nvt-i\n1\n\u2026\nj\nt-1\n\u2026\nt-i\nFigure 3\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Filter",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 15
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-36",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Filter\n\n360\nintervals and construct even m\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Filter",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 15
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-37",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Filter\n\n375\nwe used for each prediction co\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Filter",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 15
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-38",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Filter\n\nFeature\nMaps\n60\u00d71\u00d78\nFeature\nMaps\n5\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Filter",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 15
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-39",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nvi,t-j,1\nv1,t-1,1",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 17
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-40",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nvi,t-1,1\nmarkets\npast days\n1\nfeatures\n1\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 17
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-41",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 Filter\n\nk\nv1,t-j,1",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "Filter",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 18
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-42",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nvi,t-j,1\nv1,t-1,1",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 18
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-43",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nvi,t-1,1\nmarkets\npast days\n1\nfeatures\n1\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 18
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-44",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 \u2026\n\nby a \ufb01nal 2 \u00d7 1 max pooling layer.\nFina\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "\u2026",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 18
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-45",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 5. Initial variable set for each market (1\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "5. Initial variable set for each market (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 20
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-46",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 5. Initial variable set for each market (1\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "5. Initial variable set for each market (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 20
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-47",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 5. Initial variable set for each market (1\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "5. Initial variable set for each market (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 20
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-48",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 5. Initial variable set for each market (1\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "5. Initial variable set for each market (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 20
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-49",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 5. Initial variable set for each market (2\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "5. Initial variable set for each market (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 20
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-50",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (1)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-51",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (1)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-52",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (1)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-53",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (1)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-54",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (2)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-55",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (2)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-56",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (2)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-57",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (2)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-58",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (3)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (3)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-59",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 6. Experimental settings and results (3)\n\n\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "6. Experimental settings and results (3)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 22
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-60",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 7. Discussion\n\nIt is obvious from the resu\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "7. Discussion",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 27
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-61",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 7. Discussion\n\ninformation for stock predi\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "7. Discussion",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 27
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-62",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 7. Discussion\n\nstock market prediction. A \u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "7. Discussion",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 27
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-63",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 7. Discussion\n\n620\nfor both 2D-CNNpred and\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "7. Discussion",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 27
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-64",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 8. Conclusion (1)\n\nThe noisy and nonlinear\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "8. Conclusion (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 28
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-65",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 8. Conclusion (1)\n\nstock prediction proble\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "8. Conclusion (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 28
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-66",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 8. Conclusion (1)\n\nTA-Lib\n9\nROC-15\n15 days\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "8. Conclusion (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 28
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-67",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 8. Conclusion (1)\n\nDE1\nDBAA-BAAA\nOther\nFRE\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "8. Conclusion (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 28
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-68",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 8. Conclusion (2)\n\nInvesting.com\n40\nXAU-US\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "8. Conclusion (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 28
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-69",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 8. Conclusion (2)\n\nReturn of DAX\nWorld Ind\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "8. Conclusion (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 28
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-70",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 8. Conclusion (2)\n\nYahoo Finance\n66\nAAPL\nR\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "8. Conclusion (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 28
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-71",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (1)\n\nAchelis, S. B. (2001). Tec\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-72",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (1)\n\nBeck, T., & Levine, R. (20\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-73",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (1)\n\nInternational Conference o\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-74",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (1)\n\nfor \ufb01nancial market predic\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (1)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-75",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (2)\n\nns on Neural Networks, 5, \u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-76",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (2)\n\nHow bene\ufb01cial is internati\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-77",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (2)\n\nmachine learning technique\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-78",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (2)\n\nvolume 56. John Wiley & So\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (2)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "CNNpred_revise2-b80201bb-chunk-79",
+      "kind": "chunk",
+      "label": "CNNpred: CNN-based stock market prediction using a diverse set of variables \u2014 References (3)\n\neturns: The case of the ja\u2026",
+      "group": "data/CNNpred_revise2.pdf",
+      "section": "References (3)",
+      "paper_title": "CNNpred: CNN-based stock market prediction using a diverse set of variables",
+      "page": 31
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-0",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Neural Networks\n\nAlex Krizhevsky\nUniversity of Toronto\n\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Neural Networks",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 0
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-1",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Abstract\n\nWe trained a large, deep convolutional neural\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Abstract",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 0
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-2",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Introduction (1)\n\nCurrent approaches to object recognit\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Introduction (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 0
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-3",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Introduction (1)\n\nconsists of hundreds of thousands of \u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Introduction (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 0
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-4",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Introduction (1)\n\nperformance is likely to be only slig\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Introduction (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 0
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-5",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Introduction (1)\n\na number of new and unusual features \u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Introduction (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 0
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-6",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Introduction (2)\n\nB GPUs. All of our experiments sugges\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Introduction (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 0
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-7",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Dataset\n\nImageNet is a dataset of over 15 million l\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Dataset",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-8",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Dataset\n\nis not among the \ufb01ve labels considered mos\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Dataset",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-9",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (1)\n\nThe architecture of our network i\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-10",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (1)\n\nwith gradient descent, these satu\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-11",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (1)\n\nthey are observing is different f\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-12",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (1)\n\nonly from those kernel maps in la\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-13",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (2)\n\ncause most of the net\u2019s parameter\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-14",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (2)\n\nmin(N\u22121,i+n/2)\nX\nj=max(0,i\u2212n/2)\n(\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-15",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (2)\n\nrespectively. We also veri\ufb01ed the\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-16",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (2)\n\npooling \ufb01nd it slightly more dif\ufb01\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-17",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (3)\n\nin the second layer. The neurons \u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (3)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-18",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 The Architecture (3)\n\nat the bottom. The GPUs communica\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "The Architecture (3)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 1
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-19",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Reducing Over\ufb01tting (1)\n\nOur neural network architectur\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Reducing Over\ufb01tting (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 4
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-20",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Reducing Over\ufb01tting (1)\n\ntions. We do this by extractin\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Reducing Over\ufb01tting (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 4
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-21",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Reducing Over\ufb01tting (1)\n\n5\nwith magnitudes proportional\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Reducing Over\ufb01tting (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 4
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-22",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Reducing Over\ufb01tting (1)\n\nto train. There is, however, a\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Reducing Over\ufb01tting (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 4
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-23",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Reducing Over\ufb01tting (2)\n\nr neurons. At test time, we us\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Reducing Over\ufb01tting (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 4
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-24",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Details of learning\n\nWe trained our models using stocha\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Details of learning",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 5
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-25",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Details of learning\n\nbiases in the remaining layers wit\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Details of learning",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 5
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-26",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Results\n\nOur results on ILSVRC-2010 are summarized in T\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Results",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-27",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Model\n\nTop-1\nTop-5\nSparse coding [2]\n47.1%\n28.2%\nSIFT +\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Model",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-28",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Model\n\nlease with the aforementioned \ufb01ve CNNs gives an \u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Model",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-29",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Model (1)\n\nTop-1 (val)\nTop-5 (val)\nTop-5 (test)\nSIFT + \u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Model (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-30",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Model (1)\n\n6.1\nQualitative Evaluations\nFigure 3 shows t\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Model (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-31",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Model (1)\n\nremaining columns show the six training imag\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Model (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-32",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Model (1)\n\nthe training set that are most similar to ea\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Model (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-33",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Model (2)\n\ner or not they are semantically similar.",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Model (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 6
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-34",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 Discussion\n\nOur results show that a large, deep convolu\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "Discussion",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 7
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-35",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 References (1)\n\n[1] R.M. Bell and Y. Koren. Lessons fro\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "References (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 8
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-36",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 References (1)\n\nincremental bayesian approach tested on\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "References (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 8
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-37",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 References (1)\n\nESANN, 2011.\n[15] Y. Le Cun, B. Boser, \u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "References (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 8
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-38",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 References (1)\n\ncation: Generalizing to New Classes at \u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "References (1)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 8
+    },
+    {
+      "id": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-39",
+      "kind": "chunk",
+      "label": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks \u2014 References (2)\n\nter vision, 77(1):157\u2013173, 2008.\n[24] J\u2026",
+      "group": "data/NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1.pdf",
+      "section": "References (2)",
+      "paper_title": "ImageNet Classi\ufb01cation with Deep Convolutional Neural Networks",
+      "page": 8
+    }
+  ],
+  "links": [
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-0",
+      "target": "1706.03762v7-bdfaa68d-chunk-1",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-1",
+      "target": "1706.03762v7-bdfaa68d-chunk-2",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-2",
+      "target": "1706.03762v7-bdfaa68d-chunk-3",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-3",
+      "target": "1706.03762v7-bdfaa68d-chunk-4",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-4",
+      "target": "1706.03762v7-bdfaa68d-chunk-5",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-5",
+      "target": "1706.03762v7-bdfaa68d-chunk-6",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-6",
+      "target": "1706.03762v7-bdfaa68d-chunk-7",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-7",
+      "target": "1706.03762v7-bdfaa68d-chunk-8",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-8",
+      "target": "1706.03762v7-bdfaa68d-chunk-9",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-9",
+      "target": "1706.03762v7-bdfaa68d-chunk-10",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-10",
+      "target": "1706.03762v7-bdfaa68d-chunk-11",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-11",
+      "target": "1706.03762v7-bdfaa68d-chunk-12",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-12",
+      "target": "1706.03762v7-bdfaa68d-chunk-13",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-13",
+      "target": "1706.03762v7-bdfaa68d-chunk-14",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-14",
+      "target": "1706.03762v7-bdfaa68d-chunk-15",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-15",
+      "target": "1706.03762v7-bdfaa68d-chunk-16",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-16",
+      "target": "1706.03762v7-bdfaa68d-chunk-17",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-17",
+      "target": "1706.03762v7-bdfaa68d-chunk-18",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-18",
+      "target": "1706.03762v7-bdfaa68d-chunk-19",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-19",
+      "target": "1706.03762v7-bdfaa68d-chunk-20",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-20",
+      "target": "1706.03762v7-bdfaa68d-chunk-21",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-21",
+      "target": "1706.03762v7-bdfaa68d-chunk-22",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-22",
+      "target": "1706.03762v7-bdfaa68d-chunk-23",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-23",
+      "target": "1706.03762v7-bdfaa68d-chunk-24",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-24",
+      "target": "1706.03762v7-bdfaa68d-chunk-25",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-25",
+      "target": "1706.03762v7-bdfaa68d-chunk-26",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-26",
+      "target": "1706.03762v7-bdfaa68d-chunk-27",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-27",
+      "target": "1706.03762v7-bdfaa68d-chunk-28",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-28",
+      "target": "1706.03762v7-bdfaa68d-chunk-29",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-29",
+      "target": "1706.03762v7-bdfaa68d-chunk-30",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-30",
+      "target": "1706.03762v7-bdfaa68d-chunk-31",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-31",
+      "target": "1706.03762v7-bdfaa68d-chunk-32",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-32",
+      "target": "1706.03762v7-bdfaa68d-chunk-33",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-33",
+      "target": "1706.03762v7-bdfaa68d-chunk-34",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-34",
+      "target": "1706.03762v7-bdfaa68d-chunk-35",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-35",
+      "target": "1706.03762v7-bdfaa68d-chunk-36",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-36",
+      "target": "1706.03762v7-bdfaa68d-chunk-37",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-37",
+      "target": "1706.03762v7-bdfaa68d-chunk-38",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-38",
+      "target": "1706.03762v7-bdfaa68d-chunk-39",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-39",
+      "target": "1706.03762v7-bdfaa68d-chunk-40",
+      "kind": "sequence"
+    },
+    {
+      "source": "1706.03762v7-bdfaa68d-chunk-40",
+      "target": "1706.03762v7-bdfaa68d-chunk-41",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-0",
+      "target": "2010.11929v2-8ce7b839-chunk-1",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-1",
+      "target": "2010.11929v2-8ce7b839-chunk-2",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-2",
+      "target": "2010.11929v2-8ce7b839-chunk-3",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-3",
+      "target": "2010.11929v2-8ce7b839-chunk-4",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-4",
+      "target": "2010.11929v2-8ce7b839-chunk-5",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-5",
+      "target": "2010.11929v2-8ce7b839-chunk-6",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-6",
+      "target": "2010.11929v2-8ce7b839-chunk-7",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-7",
+      "target": "2010.11929v2-8ce7b839-chunk-8",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-8",
+      "target": "2010.11929v2-8ce7b839-chunk-9",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-9",
+      "target": "2010.11929v2-8ce7b839-chunk-10",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-10",
+      "target": "2010.11929v2-8ce7b839-chunk-11",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-11",
+      "target": "2010.11929v2-8ce7b839-chunk-12",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-12",
+      "target": "2010.11929v2-8ce7b839-chunk-13",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-13",
+      "target": "2010.11929v2-8ce7b839-chunk-14",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-14",
+      "target": "2010.11929v2-8ce7b839-chunk-15",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-15",
+      "target": "2010.11929v2-8ce7b839-chunk-16",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-16",
+      "target": "2010.11929v2-8ce7b839-chunk-17",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-17",
+      "target": "2010.11929v2-8ce7b839-chunk-18",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-18",
+      "target": "2010.11929v2-8ce7b839-chunk-19",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-19",
+      "target": "2010.11929v2-8ce7b839-chunk-20",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-20",
+      "target": "2010.11929v2-8ce7b839-chunk-21",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-21",
+      "target": "2010.11929v2-8ce7b839-chunk-22",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-22",
+      "target": "2010.11929v2-8ce7b839-chunk-23",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-23",
+      "target": "2010.11929v2-8ce7b839-chunk-24",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-24",
+      "target": "2010.11929v2-8ce7b839-chunk-25",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-25",
+      "target": "2010.11929v2-8ce7b839-chunk-26",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-26",
+      "target": "2010.11929v2-8ce7b839-chunk-27",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-27",
+      "target": "2010.11929v2-8ce7b839-chunk-28",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-28",
+      "target": "2010.11929v2-8ce7b839-chunk-29",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-29",
+      "target": "2010.11929v2-8ce7b839-chunk-30",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-30",
+      "target": "2010.11929v2-8ce7b839-chunk-31",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-31",
+      "target": "2010.11929v2-8ce7b839-chunk-32",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-32",
+      "target": "2010.11929v2-8ce7b839-chunk-33",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-33",
+      "target": "2010.11929v2-8ce7b839-chunk-34",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-34",
+      "target": "2010.11929v2-8ce7b839-chunk-35",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-35",
+      "target": "2010.11929v2-8ce7b839-chunk-36",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-36",
+      "target": "2010.11929v2-8ce7b839-chunk-37",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-37",
+      "target": "2010.11929v2-8ce7b839-chunk-38",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-38",
+      "target": "2010.11929v2-8ce7b839-chunk-39",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-39",
+      "target": "2010.11929v2-8ce7b839-chunk-40",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-40",
+      "target": "2010.11929v2-8ce7b839-chunk-41",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-41",
+      "target": "2010.11929v2-8ce7b839-chunk-42",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-42",
+      "target": "2010.11929v2-8ce7b839-chunk-43",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-43",
+      "target": "2010.11929v2-8ce7b839-chunk-44",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-44",
+      "target": "2010.11929v2-8ce7b839-chunk-45",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-45",
+      "target": "2010.11929v2-8ce7b839-chunk-46",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-46",
+      "target": "2010.11929v2-8ce7b839-chunk-47",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-47",
+      "target": "2010.11929v2-8ce7b839-chunk-48",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-48",
+      "target": "2010.11929v2-8ce7b839-chunk-49",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-49",
+      "target": "2010.11929v2-8ce7b839-chunk-50",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-50",
+      "target": "2010.11929v2-8ce7b839-chunk-51",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-51",
+      "target": "2010.11929v2-8ce7b839-chunk-52",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-52",
+      "target": "2010.11929v2-8ce7b839-chunk-53",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-53",
+      "target": "2010.11929v2-8ce7b839-chunk-54",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-54",
+      "target": "2010.11929v2-8ce7b839-chunk-55",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-55",
+      "target": "2010.11929v2-8ce7b839-chunk-56",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-56",
+      "target": "2010.11929v2-8ce7b839-chunk-57",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-57",
+      "target": "2010.11929v2-8ce7b839-chunk-58",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-58",
+      "target": "2010.11929v2-8ce7b839-chunk-59",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-59",
+      "target": "2010.11929v2-8ce7b839-chunk-60",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-60",
+      "target": "2010.11929v2-8ce7b839-chunk-61",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-61",
+      "target": "2010.11929v2-8ce7b839-chunk-62",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-62",
+      "target": "2010.11929v2-8ce7b839-chunk-63",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-63",
+      "target": "2010.11929v2-8ce7b839-chunk-64",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-64",
+      "target": "2010.11929v2-8ce7b839-chunk-65",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-65",
+      "target": "2010.11929v2-8ce7b839-chunk-66",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-66",
+      "target": "2010.11929v2-8ce7b839-chunk-67",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-67",
+      "target": "2010.11929v2-8ce7b839-chunk-68",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-68",
+      "target": "2010.11929v2-8ce7b839-chunk-69",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-69",
+      "target": "2010.11929v2-8ce7b839-chunk-70",
+      "kind": "sequence"
+    },
+    {
+      "source": "2010.11929v2-8ce7b839-chunk-70",
+      "target": "2010.11929v2-8ce7b839-chunk-71",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-0",
+      "target": "CNNpred_revise2-b80201bb-chunk-1",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-1",
+      "target": "CNNpred_revise2-b80201bb-chunk-2",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-2",
+      "target": "CNNpred_revise2-b80201bb-chunk-3",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-3",
+      "target": "CNNpred_revise2-b80201bb-chunk-4",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-4",
+      "target": "CNNpred_revise2-b80201bb-chunk-5",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-5",
+      "target": "CNNpred_revise2-b80201bb-chunk-6",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-6",
+      "target": "CNNpred_revise2-b80201bb-chunk-7",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-7",
+      "target": "CNNpred_revise2-b80201bb-chunk-8",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-8",
+      "target": "CNNpred_revise2-b80201bb-chunk-9",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-9",
+      "target": "CNNpred_revise2-b80201bb-chunk-10",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-10",
+      "target": "CNNpred_revise2-b80201bb-chunk-11",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-11",
+      "target": "CNNpred_revise2-b80201bb-chunk-12",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-12",
+      "target": "CNNpred_revise2-b80201bb-chunk-13",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-13",
+      "target": "CNNpred_revise2-b80201bb-chunk-14",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-14",
+      "target": "CNNpred_revise2-b80201bb-chunk-15",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-15",
+      "target": "CNNpred_revise2-b80201bb-chunk-16",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-16",
+      "target": "CNNpred_revise2-b80201bb-chunk-17",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-17",
+      "target": "CNNpred_revise2-b80201bb-chunk-18",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-18",
+      "target": "CNNpred_revise2-b80201bb-chunk-19",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-19",
+      "target": "CNNpred_revise2-b80201bb-chunk-20",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-20",
+      "target": "CNNpred_revise2-b80201bb-chunk-21",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-21",
+      "target": "CNNpred_revise2-b80201bb-chunk-22",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-22",
+      "target": "CNNpred_revise2-b80201bb-chunk-23",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-23",
+      "target": "CNNpred_revise2-b80201bb-chunk-24",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-24",
+      "target": "CNNpred_revise2-b80201bb-chunk-25",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-25",
+      "target": "CNNpred_revise2-b80201bb-chunk-26",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-26",
+      "target": "CNNpred_revise2-b80201bb-chunk-27",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-27",
+      "target": "CNNpred_revise2-b80201bb-chunk-28",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-28",
+      "target": "CNNpred_revise2-b80201bb-chunk-29",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-29",
+      "target": "CNNpred_revise2-b80201bb-chunk-30",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-30",
+      "target": "CNNpred_revise2-b80201bb-chunk-31",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-31",
+      "target": "CNNpred_revise2-b80201bb-chunk-32",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-32",
+      "target": "CNNpred_revise2-b80201bb-chunk-33",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-33",
+      "target": "CNNpred_revise2-b80201bb-chunk-34",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-34",
+      "target": "CNNpred_revise2-b80201bb-chunk-35",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-35",
+      "target": "CNNpred_revise2-b80201bb-chunk-36",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-36",
+      "target": "CNNpred_revise2-b80201bb-chunk-37",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-37",
+      "target": "CNNpred_revise2-b80201bb-chunk-38",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-38",
+      "target": "CNNpred_revise2-b80201bb-chunk-39",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-39",
+      "target": "CNNpred_revise2-b80201bb-chunk-40",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-40",
+      "target": "CNNpred_revise2-b80201bb-chunk-41",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-41",
+      "target": "CNNpred_revise2-b80201bb-chunk-42",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-42",
+      "target": "CNNpred_revise2-b80201bb-chunk-43",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-43",
+      "target": "CNNpred_revise2-b80201bb-chunk-44",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-44",
+      "target": "CNNpred_revise2-b80201bb-chunk-45",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-45",
+      "target": "CNNpred_revise2-b80201bb-chunk-46",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-46",
+      "target": "CNNpred_revise2-b80201bb-chunk-47",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-47",
+      "target": "CNNpred_revise2-b80201bb-chunk-48",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-48",
+      "target": "CNNpred_revise2-b80201bb-chunk-49",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-49",
+      "target": "CNNpred_revise2-b80201bb-chunk-50",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-50",
+      "target": "CNNpred_revise2-b80201bb-chunk-51",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-51",
+      "target": "CNNpred_revise2-b80201bb-chunk-52",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-52",
+      "target": "CNNpred_revise2-b80201bb-chunk-53",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-53",
+      "target": "CNNpred_revise2-b80201bb-chunk-54",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-54",
+      "target": "CNNpred_revise2-b80201bb-chunk-55",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-55",
+      "target": "CNNpred_revise2-b80201bb-chunk-56",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-56",
+      "target": "CNNpred_revise2-b80201bb-chunk-57",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-57",
+      "target": "CNNpred_revise2-b80201bb-chunk-58",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-58",
+      "target": "CNNpred_revise2-b80201bb-chunk-59",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-59",
+      "target": "CNNpred_revise2-b80201bb-chunk-60",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-60",
+      "target": "CNNpred_revise2-b80201bb-chunk-61",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-61",
+      "target": "CNNpred_revise2-b80201bb-chunk-62",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-62",
+      "target": "CNNpred_revise2-b80201bb-chunk-63",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-63",
+      "target": "CNNpred_revise2-b80201bb-chunk-64",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-64",
+      "target": "CNNpred_revise2-b80201bb-chunk-65",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-65",
+      "target": "CNNpred_revise2-b80201bb-chunk-66",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-66",
+      "target": "CNNpred_revise2-b80201bb-chunk-67",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-67",
+      "target": "CNNpred_revise2-b80201bb-chunk-68",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-68",
+      "target": "CNNpred_revise2-b80201bb-chunk-69",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-69",
+      "target": "CNNpred_revise2-b80201bb-chunk-70",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-70",
+      "target": "CNNpred_revise2-b80201bb-chunk-71",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-71",
+      "target": "CNNpred_revise2-b80201bb-chunk-72",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-72",
+      "target": "CNNpred_revise2-b80201bb-chunk-73",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-73",
+      "target": "CNNpred_revise2-b80201bb-chunk-74",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-74",
+      "target": "CNNpred_revise2-b80201bb-chunk-75",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-75",
+      "target": "CNNpred_revise2-b80201bb-chunk-76",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-76",
+      "target": "CNNpred_revise2-b80201bb-chunk-77",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-77",
+      "target": "CNNpred_revise2-b80201bb-chunk-78",
+      "kind": "sequence"
+    },
+    {
+      "source": "CNNpred_revise2-b80201bb-chunk-78",
+      "target": "CNNpred_revise2-b80201bb-chunk-79",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-0",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-1",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-1",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-2",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-2",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-3",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-3",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-4",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-4",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-5",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-5",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-6",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-6",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-7",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-7",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-8",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-8",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-9",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-9",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-10",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-10",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-11",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-11",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-12",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-12",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-13",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-13",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-14",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-14",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-15",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-15",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-16",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-16",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-17",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-17",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-18",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-18",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-19",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-19",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-20",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-20",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-21",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-21",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-22",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-22",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-23",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-23",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-24",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-24",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-25",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-25",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-26",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-26",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-27",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-27",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-28",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-28",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-29",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-29",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-30",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-30",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-31",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-31",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-32",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-32",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-33",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-33",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-34",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-34",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-35",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-35",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-36",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-36",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-37",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-37",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-38",
+      "kind": "sequence"
+    },
+    {
+      "source": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-38",
+      "target": "NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1-90137160-chunk-39",
+      "kind": "sequence"
+    }
+  ]
+}

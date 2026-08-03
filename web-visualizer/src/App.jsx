@@ -1,40 +1,41 @@
 import React, { useEffect, useMemo, useState } from "react";
 import GlobeGraph from "./components/GlobeGraph.jsx";
 import ControlPanel from "./components/ControlPanel.jsx";
+import FigurePlate from "./components/FigurePlate.jsx";
 import { askQuestion, uploadPdf } from "./utils/api.js";
 import {
   EMPTY_GRAPH,
   buildGraphUrl,
   colorForGroup,
+  filterByLayer,
+  hasEntities,
   isGraphShape,
   loadCachedGraph,
   saveCachedGraph,
 } from "./utils/graphData.js";
 
 function endpointId(endpoint) {
-  if (endpoint && typeof endpoint === "object") {
-    return endpoint.id;
-  }
-  return endpoint;
+  return endpoint && typeof endpoint === "object" ? endpoint.id : endpoint;
 }
 
 function App() {
   const [search, setSearch] = useState("");
   const [showEdges, setShowEdges] = useState(true);
+  const [showLabels, setShowLabels] = useState(true);
+  const [layer, setLayer] = useState("entities");
   const [groupFilter, setGroupFilter] = useState("all");
   const [highlightNode, setHighlightNode] = useState(null);
   const [activeNodeIds, setActiveNodeIds] = useState([]);
   const [graphData, setGraphData] = useState(EMPTY_GRAPH);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
-  const [question, setQuestion] = useState("");
   const [asking, setAsking] = useState(false);
   const [answer, setAnswer] = useState("");
   const [qaError, setQaError] = useState("");
   const [matches, setMatches] = useState([]);
+  const [facts, setFacts] = useState([]);
 
   const loadGraph = async ({ preferCache = true } = {}) => {
     const cached = preferCache ? loadCachedGraph() : null;
@@ -42,13 +43,8 @@ function App() {
       setGraphData(cached);
       setLoading(false);
     }
-
     try {
-      setRefreshing(Boolean(cached));
-      if (!cached) setLoading(true);
-
-      const url = buildGraphUrl();
-      const res = await fetch(url, { cache: "no-cache" });
+      const res = await fetch(buildGraphUrl(), { cache: "no-cache" });
       if (!res.ok) throw new Error(`Failed to load data (${res.status})`);
       const json = await res.json();
       const next = isGraphShape(json) ? json : EMPTY_GRAPH;
@@ -57,17 +53,14 @@ function App() {
       setError("");
     } catch (err) {
       console.error(err);
-      if (!cached) {
-        setGraphData(EMPTY_GRAPH);
-      }
+      if (!cached) setGraphData(EMPTY_GRAPH);
       setError(
         cached
-          ? "Showing cached graph data. Could not refresh latest copy."
-          : "Could not load graph data. Ensure chroma-graph.json exists."
+          ? "Showing a cached copy — could not reach the latest graph."
+          : "No graph data yet. Run an ingest to build one."
       );
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
   };
 
@@ -77,68 +70,78 @@ function App() {
   }, []);
 
   const coloredData = useMemo(() => {
-    const nodes = graphData.nodes.map((n) => {
+    const nodes = filterByLayer(graphData.nodes, layer).map((n) => {
       const group = n.group || "ungrouped";
-      const groupColor = colorForGroup(group);
-      return {
-        ...n,
-        group,
-        groupColor,
-        color: n.color || groupColor,
-      };
+      return { ...n, group, color: n.color || colorForGroup(group) };
     });
-    return { nodes, links: graphData.links };
-  }, [graphData]);
+    const visible = new Set(nodes.map((n) => n.id));
+    const links = graphData.links.filter(
+      (l) => visible.has(endpointId(l.source)) && visible.has(endpointId(l.target))
+    );
+    return { nodes, links };
+  }, [graphData, layer]);
 
-  const groups = useMemo(() => {
-    const g = new Set(coloredData.nodes.map((n) => n.group || "ungrouped"));
-    return ["all", ...Array.from(g)];
-  }, [coloredData]);
+  const groups = useMemo(
+    () => ["all", ...new Set(coloredData.nodes.map((n) => n.group || "ungrouped"))],
+    [coloredData]
+  );
+
+  const graphHasEntities = useMemo(() => hasEntities(graphData.nodes), [graphData]);
 
   const filteredData = useMemo(() => {
     const activeSet = new Set(activeNodeIds);
+    const needle = search.toLowerCase();
     const nodes = coloredData.nodes.filter((n) => {
-      const matchesSearch = search
-        ? n.id.toLowerCase().includes(search.toLowerCase()) ||
-          (n.label || "").toLowerCase().includes(search.toLowerCase())
+      const matchesSearch = needle
+        ? n.id.toLowerCase().includes(needle) ||
+          (n.name || "").toLowerCase().includes(needle) ||
+          (n.label || "").toLowerCase().includes(needle)
         : true;
       const matchesGroup = groupFilter === "all" || n.group === groupFilter;
-      const usedInPrompt = activeSet.has(n.id);
-      return (matchesSearch || usedInPrompt) && matchesGroup;
+      return (matchesSearch || activeSet.has(n.id)) && matchesGroup;
     });
-
-    const nodeIds = new Set(nodes.map((n) => n.id));
-    const links = coloredData.links.filter(
-      (l) => nodeIds.has(endpointId(l.source)) && nodeIds.has(endpointId(l.target))
-    );
-
-    return { nodes, links };
+    const ids = new Set(nodes.map((n) => n.id));
+    return {
+      nodes,
+      links: coloredData.links.filter(
+        (l) => ids.has(endpointId(l.source)) && ids.has(endpointId(l.target))
+      ),
+    };
   }, [search, groupFilter, coloredData, activeNodeIds]);
 
-  const onSearchSubmit = (value) => {
-    setSearch(value);
-    const match = coloredData.nodes.find(
-      (n) =>
-        n.id.toLowerCase() === value.toLowerCase() ||
-        (n.label || "").toLowerCase() === value.toLowerCase()
-    );
-    if (match) {
-      setHighlightNode(match.id);
-    }
+  const changeLayer = (next) => {
+    setLayer(next);
+    setGroupFilter("all");
   };
+
+  const corpus = useMemo(() => {
+    const papers = new Set();
+    let chunks = 0;
+    let entities = 0;
+    graphData.nodes.forEach((n) => {
+      if (n.kind === "entity") entities += 1;
+      else {
+        chunks += 1;
+        if (n.group) papers.add(n.group);
+      }
+    });
+    return { papers: papers.size, chunks, entities };
+  }, [graphData]);
 
   const handleUpload = async (file) => {
     if (!file) return;
     try {
       setUploading(true);
-      setUploadStatus("Uploading and ingesting...");
+      setUploadStatus("Reading, chunking and embedding — this takes a minute.");
       setError("");
       const res = await uploadPdf(file);
-      setUploadStatus(`${res.filename} ingested (${res.newChunks} new chunks).`);
+      setUploadStatus(
+        `Added ${res.filename}: ${res.newChunks} passages, ${res.newEpisodes ?? 0} graph episodes.`
+      );
       await loadGraph({ preferCache: false });
     } catch (err) {
       setUploadStatus("");
-      setError(err.message || "Upload failed.");
+      setError(err.message || "Could not add that paper.");
     } finally {
       setUploading(false);
     }
@@ -149,19 +152,20 @@ function App() {
     try {
       setAsking(true);
       setQaError("");
-      setQuestion(query);
       const res = await askQuestion(query);
       const used = Array.isArray(res.usedNodeIds) ? res.usedNodeIds : [];
       setAnswer(res.answer || "");
       setMatches(Array.isArray(res.matches) ? res.matches : []);
+      setFacts(Array.isArray(res.facts) ? res.facts : []);
       setActiveNodeIds(used);
-      if (used.length > 0) {
-        setHighlightNode(used[0]);
-      }
+      const visible = new Set(coloredData.nodes.map((n) => n.id));
+      const focus = used.find((id) => visible.has(id));
+      if (focus) setHighlightNode(focus);
     } catch (err) {
-      setQaError(err.message || "Query failed.");
+      setQaError(err.message || "That question could not be answered.");
       setAnswer("");
       setMatches([]);
+      setFacts([]);
       setActiveNodeIds([]);
     } finally {
       setAsking(false);
@@ -171,43 +175,73 @@ function App() {
   const focusNode = (nodeId) => {
     if (!nodeId) return;
     setHighlightNode(nodeId);
-    setSearch(nodeId);
+    setSearch("");
   };
 
   return (
     <div className="app">
-      {loading && <div className="loading">Loading graph...</div>}
-      {!loading && refreshing && (
-        <div className="loading">Refreshing latest graph...</div>
-      )}
-      {error && <div className="error">{error}</div>}
-      <GlobeGraph
-        data={filteredData}
-        highlightNode={highlightNode}
-        activeNodeIds={activeNodeIds}
-        showEdges={showEdges}
-        onNodeHover={setHighlightNode}
-        onNodeClick={setHighlightNode}
-      />
-      <ControlPanel
-        search={search}
-        onSearch={onSearchSubmit}
-        showEdges={showEdges}
-        setShowEdges={setShowEdges}
-        groupFilter={groupFilter}
-        setGroupFilter={setGroupFilter}
-        groups={groups}
-        onUploadFile={handleUpload}
-        uploading={uploading}
-        uploadStatus={uploadStatus}
-        onAsk={handleAsk}
-        asking={asking}
-        question={question}
-        answer={answer}
-        qaError={qaError}
-        matches={matches}
-        onFocusNode={focusNode}
-      />
+      <header className="masthead">
+        <div className="wordmark">
+          <span className="mark">Research</span> Knowledge Graph
+        </div>
+        <dl className="stats">
+          <div>
+            <dt>Papers</dt>
+            <dd>{corpus.papers || "—"}</dd>
+          </div>
+          <div>
+            <dt>Passages</dt>
+            <dd>{corpus.chunks || "—"}</dd>
+          </div>
+          <div>
+            <dt>Entities</dt>
+            <dd>{corpus.entities || "—"}</dd>
+          </div>
+        </dl>
+      </header>
+
+      {error && <div className="banner">{error}</div>}
+
+      <main className="layout">
+        <ControlPanel
+          onAsk={handleAsk}
+          asking={asking}
+          answer={answer}
+          qaError={qaError}
+          matches={matches}
+          facts={facts}
+          onFocusNode={focusNode}
+          onUploadFile={handleUpload}
+          uploading={uploading}
+          uploadStatus={uploadStatus}
+        />
+
+        <FigurePlate
+          layer={layer}
+          setLayer={changeLayer}
+          groupFilter={groupFilter}
+          setGroupFilter={setGroupFilter}
+          groups={groups}
+          showEdges={showEdges}
+          setShowEdges={setShowEdges}
+          showLabels={showLabels}
+          setShowLabels={setShowLabels}
+          hasEntities={graphHasEntities}
+          nodeCount={filteredData.nodes.length}
+          linkCount={filteredData.links.length}
+          loading={loading}
+        >
+          <GlobeGraph
+            data={filteredData}
+            highlightNode={highlightNode}
+            activeNodeIds={activeNodeIds}
+            showEdges={showEdges}
+            showLabels={showLabels}
+            onNodeHover={setHighlightNode}
+            onNodeClick={setHighlightNode}
+          />
+        </FigurePlate>
+      </main>
     </div>
   );
 }
