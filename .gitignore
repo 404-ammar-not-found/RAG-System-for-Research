@@ -181,3 +181,10 @@ cython_debug/
 .cursorindexingignore
 
 chroma_db/
+data/*.pdf
+# FalkorDB container volume + old pre-cosine Chroma store
+falkor_data/
+chroma_db.old-L2-backup/
+
+# Dependencies should not be in version control
+node_modules/
