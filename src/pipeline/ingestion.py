@@ -98,7 +98,9 @@ def pending_pdfs(vectordb: Any, settings: PipelineSettings) -> list[tuple[Path, 
 
 
 def build_chunk_records(
-    sections: list[Section], settings: PipelineSettings
+    sections: list[Section],
+    settings: PipelineSettings,
+    paper_metadata: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Chunks with ids and prev/next links, ready to embed.
 
@@ -107,6 +109,12 @@ def build_chunk_records(
     """
     records: list[dict[str, Any]] = []
     per_source: dict[str, int] = {}
+    # Running normalised text per paper, so every chunk can carry its offset
+    # within the document. A PDF has no stable character stream, so offsets are
+    # defined against this extraction — which is the text that got indexed.
+    doc_text: dict[str, str] = {}
+    cursor: dict[str, int] = {}
+    biblio = paper_metadata or {}
 
     for section in sections:
         if section.is_reference and not settings.index_references:
@@ -120,6 +128,18 @@ def build_chunk_records(
             # The citation lives in metadata only. Prepending it to the text
             # (as this pipeline used to) embeds a file path into every vector.
             meta["id"] = f"{Path(source).stem}-{meta['file_hash'][:8]}-chunk-{idx}"
+
+            body = chunk["text"].partition("\n\n")[2] or chunk["text"]
+            existing = doc_text.get(source, "")
+            found = existing.find(body, cursor.get(source, 0))
+            if found == -1:
+                found = len(existing)
+                doc_text[source] = existing + body + "\n\n"
+            cursor[source] = found + len(body)
+            meta["doc_start"] = found
+            meta["doc_end"] = found + len(body)
+
+            meta.update(biblio.get(source, {}))
             records.append({"text": chunk["text"], "metadata": meta})
 
     # Link neighbours within each paper so retrieval can expand by id later.
@@ -135,9 +155,31 @@ def build_chunk_records(
     return records
 
 
+def resolve_bibliography(sections: list[Section]) -> dict[str, dict[str, Any]]:
+    """Look up each paper's record once, keyed by source path.
+
+    Network failures degrade to empty metadata; a lookup outage must never stop
+    an ingest.
+    """
+    from .scholarly import resolve_paper, warn_lines
+
+    out: dict[str, dict[str, Any]] = {}
+    for source in dict.fromkeys(s.source for s in sections):
+        title = next((s.paper_title for s in sections if s.source == source), "")
+        try:
+            record = resolve_paper(Path(source), title_hint=title)
+        except Exception as exc:
+            print(f"[WARN] bibliographic lookup failed for {Path(source).name}: {str(exc)[:80]}")
+            continue
+        out[source] = record.as_chunk_metadata()
+        for line in warn_lines(record):
+            print(f"  [{Path(source).name}] {line}")
+    return out
+
+
 def index_sections(vectordb: Any, sections: list[Section], settings: PipelineSettings) -> int:
     """Sub-split sections into chunks and add them to Chroma."""
-    records = build_chunk_records(sections, settings)
+    records = build_chunk_records(sections, settings, resolve_bibliography(sections))
     texts = [r["text"] for r in records]
     metadatas = [r["metadata"] for r in records]
     ids = [r["metadata"]["id"] for r in records]

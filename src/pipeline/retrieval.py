@@ -14,6 +14,8 @@ from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any
 
+from .deps import message_text
+
 RRF_K = 60.0
 # Never return fewer than this, even if the reranker only liked one passage —
 # a single chunk is rarely enough to answer from.
@@ -196,7 +198,7 @@ async def rerank(llm: Any, query: str, passages: list[Passage], limit: int) -> l
 
     try:
         raw = await llm.ainvoke(prompt)
-        text = getattr(raw, "content", None) or str(raw)
+        text = message_text(raw)
         match = re.search(r"\[[\d,\s]*\]", text)
         if match is None:
             raise ValueError(f"no JSON array in reranker reply: {text[:120]!r}")
@@ -345,7 +347,7 @@ async def expand_query(llm: Any, query: str, n: int = 3) -> list[str]:
     """
     try:
         raw = await llm.ainvoke(EXPAND_PROMPT.format(query=query, n=n))
-        text = getattr(raw, "content", None) or str(raw)
+        text = message_text(raw)
         match = re.search(r"\[.*\]", text, re.S)
         subs = json.loads(match.group(0)) if match else []
     except Exception as exc:

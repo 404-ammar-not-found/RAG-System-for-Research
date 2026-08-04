@@ -188,3 +188,6 @@ chroma_db.old-L2-backup/
 
 # Dependencies should not be in version control
 node_modules/
+
+# Cached bibliographic lookups
+cache/

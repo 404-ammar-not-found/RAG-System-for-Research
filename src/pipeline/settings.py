@@ -50,6 +50,11 @@ class PipelineSettings:
     # the same daily bucket the corpus competes for. Turn on only if the eval
     # harness shows it winning.
     expand_queries: bool = False
+    # Label each passage's stance before synthesis so conflicting findings are
+    # reported as a split rather than averaged into one confident paragraph.
+    cluster_stance: bool = True
+    # Check every generated sentence against the span it cited.
+    verify_claims: bool = True
 
     # Models.
     # NB: gemini-3-flash-preview has a free-tier cap of 20 generate requests

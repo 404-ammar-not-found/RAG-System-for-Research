@@ -12,6 +12,7 @@ sentences. Everything below exists to undo that before any text is indexed.
 """
 
 import re
+import unicodedata
 from collections import Counter
 from dataclasses import dataclass, field
 from hashlib import sha256
@@ -128,6 +129,10 @@ def _lines_with_sizes(page: pymupdf.Page) -> list[tuple[str, float, bool]]:
             text = "".join(s.get("text", "") for s in spans).strip()
             if not text:
                 continue
+            # NFKC folds typographic ligatures (ﬁ ﬂ ﬀ) back to plain letters.
+            # PDFs are full of them — 1607 across this corpus — and each one is
+            # a token BM25 can never match: "Classiﬁcation" != "classification".
+            text = unicodedata.normalize("NFKC", text)
             size = max((float(s.get("size", 0.0)) for s in spans), default=0.0)
             # Bold if every non-blank span is bold — a heading is uniformly
             # weighted, a body sentence with one bold term is not.

@@ -16,6 +16,29 @@ def get_api_key() -> str:
     return api_key
 
 
+def message_text(raw: Any) -> str:
+    """Flatten an LLM response to plain text.
+
+    LangChain's `.content` is a string for simple replies but a list of content
+    blocks (dicts with a "text" key, or bare strings) for others. Passing that
+    list straight to a regex raises TypeError, which every caller here catches
+    as "the model failed" — so a formatting detail silently disabled reranking
+    and verification. Normalise once, centrally.
+    """
+    content = getattr(raw, "content", raw)
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for block in content:
+            if isinstance(block, str):
+                parts.append(block)
+            elif isinstance(block, dict):
+                parts.append(str(block.get("text") or block.get("content") or ""))
+        return "".join(parts)
+    return str(content)
+
+
 def lc_deps() -> dict[str, Any]:
     """Lazy-import LangChain dependencies to avoid hard import errors at module import time."""
 
@@ -46,4 +69,4 @@ def lc_deps() -> dict[str, Any]:
     }
 
 
-__all__ = ["get_api_key", "lc_deps"]
+__all__ = ["get_api_key", "lc_deps", "message_text"]
