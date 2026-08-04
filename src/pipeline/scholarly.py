@@ -88,6 +88,7 @@ class PaperRecord:
     venue: str | None = None
     doi: str | None = None
     arxiv_id: str | None = None
+    arxiv_doi: str | None = None
     citation_count: int | None = None
     is_retracted: bool = False
     retraction_note: str | None = None
@@ -104,6 +105,7 @@ class PaperRecord:
             "venue": self.venue or "",
             "doi": self.doi or "",
             "arxiv_id": self.arxiv_id or "",
+            "arxiv_doi": self.arxiv_doi or "",
             "citation_count": self.citation_count or 0,
             "is_retracted": bool(self.is_retracted),
         }
@@ -135,6 +137,48 @@ def extract_ids(pdf_path: Path, pages: int = 2) -> dict[str, str | None]:
 
 
 # ------------------------------------------------------------------ sources
+
+
+def _norm_title(title: str) -> str:
+    return re.sub(r"[^a-z0-9 ]", "", title.lower()).strip()
+
+
+def _title_close(a: str, b: str, threshold: float = 0.92) -> bool:
+    """Guard against near-miss titles.
+
+    An arXiv title search for "Attention Is All You Need" also returns
+    "Not All Attention Is All You Need" and "Tensor Product Attention Is All
+    You Need" — accepting any hit would attach the wrong paper's metadata.
+    """
+    from difflib import SequenceMatcher
+
+    na, nb = _norm_title(a), _norm_title(b)
+    if not na or not nb:
+        return False
+    return na == nb or SequenceMatcher(None, na, nb).ratio() >= threshold
+
+
+def find_arxiv_by_title(title: str) -> str | None:
+    """Recover an arXiv id from a title alone.
+
+    The identifier is the key to everything else — Semantic Scholar resolves
+    arXiv ids directly, and arXiv's own API is authoritative for the metadata —
+    so a paper whose PDF hides its id is worth one search to rescue.
+    """
+    if not title:
+        return None
+    query = urllib.parse.quote(f'ti:"{title}"')
+    xml = _get_text(
+        f"http://export.arxiv.org/api/query?search_query={query}&max_results=5"
+    )
+    if not xml:
+        return None
+    for entry in re.findall(r"<entry>(.*?)</entry>", xml, re.S):
+        found = re.search(r"<title>\s*(.*?)\s*</title>", entry, re.S)
+        ident = re.search(r"<id>https?://arxiv\.org/abs/([^v<]+)", entry)
+        if found and ident and _title_close(title, " ".join(found.group(1).split())):
+            return ident.group(1)
+    return None
 
 
 def from_arxiv(arxiv_id: str, record: PaperRecord) -> bool:
@@ -239,6 +283,50 @@ def check_retraction(record: PaperRecord) -> None:
             record.retraction_note = f"Retracted by {update.get('DOI')}."
 
 
+def _s2_url(path: str, params: str) -> str:
+    key = os.getenv("SEMANTIC_SCHOLAR_KEY")
+    url = f"https://api.semanticscholar.org/graph/v1/paper/{path}?{params}"
+    return url + (f"&x-api-key={key}" if key else "")
+
+
+def from_semantic_scholar(record: PaperRecord) -> bool:
+    """Primary source for arXiv-native papers.
+
+    OpenAlex has no title-searchable record for several of these — a
+    year-filtered search for "attention is all you need" in 2017 returns
+    count=0 — while Semantic Scholar resolves an arXiv id directly. The free
+    tier rate-limits hard, so this is retried with backoff and cached.
+    """
+    ident = None
+    if record.arxiv_id:
+        ident = f"arXiv:{record.arxiv_id}"
+    elif record.doi:
+        ident = f"DOI:{record.doi}"
+    if not ident:
+        return False
+
+    data = _get(
+        _s2_url(
+            urllib.parse.quote(ident, safe=":"),
+            "fields=title,year,venue,citationCount,referenceCount,externalIds,isOpenAccess",
+        ),
+        retries=3,
+    )
+    if not data or not data.get("title"):
+        return False
+
+    record.title = record.title or data["title"]
+    record.year = record.year or data.get("year")
+    record.venue = record.venue or (data.get("venue") or None)
+    if record.citation_count is None:
+        record.citation_count = data.get("citationCount")
+    external = data.get("externalIds") or {}
+    if not record.doi and external.get("DOI"):
+        record.doi = external["DOI"]
+    record.resolved_by.append("semanticscholar")
+    return True
+
+
 def fetch_citers(record: PaperRecord, limit: int = 10) -> None:
     """Forward citations — the papers that cite this one.
 
@@ -284,6 +372,41 @@ def _save_cache(cache: dict[str, Any]) -> None:
     CACHE_PATH.write_text(json.dumps(cache, indent=2))
 
 
+def _resolve_online(record: PaperRecord) -> None:
+    """Staged resolution, most authoritative source first.
+
+    The order is dictated by what actually works, not by what the docs suggest:
+
+    1. No arXiv id? Search arXiv by title to recover one. The id is the key that
+       unlocks the rest, so it is worth one request.
+    2. arXiv API for title/year/venue — authoritative, no key, never rate-limited.
+    3. Semantic Scholar by arXiv id or DOI. This is the primary for arXiv-native
+       papers because OpenAlex has no title-searchable record for several of
+       them, and it is also the only source of forward citations here.
+    4. OpenAlex for citation counts, references and the retraction flag. Reliable
+       for published journal work (CNNpred, AlexNet), unreliable for preprints.
+    5. Crossref for retraction notices, which needs a real (non-arXiv) DOI.
+    """
+    if not record.arxiv_id and record.title:
+        found = find_arxiv_by_title(record.title)
+        if found:
+            record.arxiv_id = found
+            record.resolved_by.append("arxiv-title-search")
+
+    if record.arxiv_id:
+        if from_arxiv(record.arxiv_id, record):
+            record.resolved_by.append("arxiv")
+        # Recorded for citation display. Note it resolves at neither OpenAlex
+        # nor Crossref — both 404 on 10.48550 DOIs — so it is an identifier,
+        # not a lookup key.
+        record.arxiv_doi = f"10.48550/arXiv.{record.arxiv_id}"
+
+    from_semantic_scholar(record)
+    from_openalex(record)
+    check_retraction(record)
+    fetch_citers(record)
+
+
 def resolve_paper(
     pdf_path: Path, title_hint: str = "", *, refresh: bool = False, online: bool = True
 ) -> PaperRecord:
@@ -298,13 +421,10 @@ def resolve_paper(
 
     record = PaperRecord(key=key, arxiv_id=ids["arxiv_id"], doi=ids["doi"], title=title_hint)
     if online:
-        if record.arxiv_id:
-            from_arxiv(record.arxiv_id, record)
-            record.resolved_by.append("arxiv")
-        from_openalex(record)
-        check_retraction(record)
-        fetch_citers(record)
+        _resolve_online(record)
 
+    # A source can contribute twice (metadata, then citers); report it once.
+    record.resolved_by = list(dict.fromkeys(record.resolved_by))
     record.unresolved = not record.resolved_by
     record.fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
@@ -325,6 +445,8 @@ def warn_lines(record: PaperRecord) -> list[str]:
 
 __all__ = [
     "PaperRecord",
+    "find_arxiv_by_title",
+    "from_semantic_scholar",
     "check_retraction",
     "extract_ids",
     "fetch_citers",

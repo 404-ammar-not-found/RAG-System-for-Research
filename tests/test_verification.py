@@ -156,5 +156,53 @@ class TestStanceSplit(unittest.TestCase):
         self.assertIn("more recent", describe_split(group_by_stance(ps, labels), labels))
 
 
+class TestBibliographicResolution(unittest.TestCase):
+    """Pure resolution logic — no network."""
+
+    def test_title_guard_rejects_near_misses(self):
+        from src.pipeline.scholarly import _title_close
+
+        # An arXiv title search for the Transformer also returns these.
+        self.assertTrue(_title_close("Attention Is All You Need", "Attention is all you need"))
+        self.assertFalse(_title_close("Attention Is All You Need", "Not All Attention Is All You Need"))
+        self.assertFalse(
+            _title_close("Attention Is All You Need", "Tensor Product Attention Is All You Need")
+        )
+
+    def test_title_guard_ignores_punctuation_and_case(self):
+        from src.pipeline.scholarly import _title_close
+
+        self.assertTrue(_title_close("BERT: Pre-training of Deep Bidirectional Transformers",
+                                     "BERT  Pre training of Deep Bidirectional Transformers"))
+
+    def test_arxiv_doi_is_not_treated_as_a_lookup_key(self):
+        # 10.48550 DOIs 404 at both OpenAlex and Crossref, so carrying one as
+        # `doi` would send every lookup down a dead end.
+        from src.pipeline.scholarly import DOI_RE
+
+        self.assertTrue(DOI_RE.search("10.48550/arXiv.1706.03762"))
+
+    def test_chunk_metadata_is_all_scalars(self):
+        # Chroma rejects lists and dicts in metadata.
+        from src.pipeline.scholarly import PaperRecord
+
+        meta = PaperRecord(key="x", year=2017, citers=[{"title": "a"}],
+                           reference_ids=["w1"]).as_chunk_metadata()
+        for key, value in meta.items():
+            self.assertIsInstance(value, (str, int, float, bool), key)
+
+    def test_missing_identifiers_are_reported_as_unknown_not_clean(self):
+        from src.pipeline.scholarly import PaperRecord, warn_lines
+
+        lines = warn_lines(PaperRecord(key="x"))
+        self.assertTrue(any("could not be checked" in l for l in lines))
+
+    def test_retraction_produces_a_warning(self):
+        from src.pipeline.scholarly import PaperRecord, warn_lines
+
+        rec = PaperRecord(key="x", doi="10.1/2", is_retracted=True, retraction_note="withdrawn")
+        self.assertTrue(any("RETRACTED" in l for l in warn_lines(rec)))
+
+
 if __name__ == "__main__":
     unittest.main()
