@@ -111,6 +111,29 @@ class PaperRecord:
         }
 
 
+# Both id schemes: new-style `1706.03762`, pre-2007 `cs/0501001`, optional `v3`.
+_ID = r"(\d{4}\.\d{4,5}|[a-z-]+(?:\.[A-Z]{2})?/\d{7})(v\d+)?"
+ARXIV_LINK_RE = re.compile(rf"(?:arxiv\.org/(?:abs|pdf|html)/)?{_ID}", re.I)
+
+
+def parse_arxiv_id(text: str) -> str | None:
+    """Pull an arXiv id out of a link, an `arXiv:` string, or a bare id."""
+    match = ARXIV_LINK_RE.search(text.strip())
+    return match.group(1) + (match.group(2) or "") if match else None
+
+
+def download_arxiv_pdf(arxiv_id: str) -> bytes:
+    """Fetch a paper's PDF. Raises unless arXiv actually returns a PDF."""
+    req = urllib.request.Request(
+        f"https://arxiv.org/pdf/{arxiv_id}", headers={"User-Agent": _agent()}
+    )
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        data = resp.read()
+    if not data.startswith(b"%PDF"):
+        raise ValueError(f"arXiv returned no PDF for {arxiv_id}")
+    return data
+
+
 def extract_ids(pdf_path: Path, pages: int = 2) -> dict[str, str | None]:
     """Pull an arXiv id or DOI off the opening pages, or the filename."""
     import pymupdf

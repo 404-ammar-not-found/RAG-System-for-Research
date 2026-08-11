@@ -1,5 +1,6 @@
 import unittest
 
+from src.pipeline.deps import PROVIDERS
 from src.pipeline.graph_store import EDGE_TYPE_MAP, EDGE_TYPES, ENTITY_TYPES, format_facts
 from src.pipeline.settings import PipelineSettings
 
@@ -38,9 +39,14 @@ class TestFormatFacts(unittest.TestCase):
 
 class TestQuotaCriticalSettings(unittest.TestCase):
     def test_passage_and_graph_use_different_embedding_models(self):
-        # Gemini meters embeddings per model; sharing one halves the daily budget.
-        s = PipelineSettings()
-        self.assertNotEqual(s.embed_model, s.graph_embed_model)
+        # Hosted embeddings are metered per model, so pointing the passage store
+        # and the graph at different ones buys two daily budgets instead of one.
+        # It does not apply to the local model, which is not metered at all.
+        for provider, models in PROVIDERS.items():
+            if models["embed"] is None:  # Anthropic: no embedding API at all
+                self.assertIsNone(models["graph_embed"], provider)
+            elif models["keys"]:  # hosted, therefore quota-limited
+                self.assertNotEqual(models["embed"], models["graph_embed"], provider)
 
     def test_concurrency_is_set_explicitly_not_via_env(self):
         # graphiti_core reads SEMAPHORE_LIMIT at import time, before load_dotenv,
@@ -50,7 +56,7 @@ class TestQuotaCriticalSettings(unittest.TestCase):
         self.assertLessEqual(s.max_coroutines, 5)
 
     def test_answer_model_is_not_the_20_per_day_preview(self):
-        self.assertNotEqual(PipelineSettings().text_llm_model, "gemini-3-flash-preview")
+        self.assertNotEqual(PROVIDERS["gemini"]["text"], "gemini-3-flash-preview")
 
 
 if __name__ == "__main__":

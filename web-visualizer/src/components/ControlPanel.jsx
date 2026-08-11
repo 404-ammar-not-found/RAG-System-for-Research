@@ -51,11 +51,13 @@ function ControlPanel({
   facts,
   onFocusNode,
   onUploadFile,
+  onAddArxiv,
   uploading,
   uploadStatus,
 }) {
   const [queryInput, setQueryInput] = useState("");
   const [file, setFile] = useState(null);
+  const [arxivUrl, setArxivUrl] = useState("");
 
   const cited = useMemo(() => {
     const { order } = parseCitations(answer || "", matches || []);
@@ -148,6 +150,27 @@ function ControlPanel({
 
       <section className="block">
         <h2 className="eyebrow">Add a paper</h2>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const url = arxivUrl.trim();
+            if (!url) return;
+            if (await onAddArxiv(url)) setArxivUrl("");
+          }}
+        >
+          <input
+            type="text"
+            value={arxivUrl}
+            onChange={(e) => setArxivUrl(e.target.value)}
+            placeholder="https://arxiv.org/abs/1706.03762"
+          />
+          <button type="submit" disabled={!arxivUrl.trim() || uploading}>
+            {uploading ? "Reading paper…" : "Fetch from arXiv"}
+          </button>
+        </form>
+
+        <p className="or">or</p>
+
         <form
           onSubmit={async (e) => {
             e.preventDefault();

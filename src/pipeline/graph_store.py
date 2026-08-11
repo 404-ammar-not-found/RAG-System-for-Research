@@ -15,7 +15,7 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
-from .deps import get_api_key
+from .deps import graphiti_clients
 from .parsing import Section
 from .settings import PipelineSettings
 
@@ -156,13 +156,9 @@ class GraphStore:
 
     def __init__(self, settings: PipelineSettings) -> None:
         from graphiti_core import Graphiti
-        from graphiti_core.cross_encoder.gemini_reranker_client import GeminiRerankerClient
         from graphiti_core.driver.falkordb_driver import FalkorDriver
-        from graphiti_core.embedder.gemini import GeminiEmbedder, GeminiEmbedderConfig
-        from graphiti_core.llm_client.gemini_client import GeminiClient, LLMConfig
 
         self.settings = settings
-        api_key = get_api_key()
 
         driver = FalkorDriver(
             host=settings.falkordb_host,
@@ -173,21 +169,7 @@ class GraphStore:
         )
         self.client = Graphiti(
             graph_driver=driver,
-            llm_client=GeminiClient(
-                config=LLMConfig(
-                    api_key=api_key,
-                    model=settings.graph_llm_model,
-                    small_model=settings.graph_llm_model,
-                )
-            ),
-            embedder=GeminiEmbedder(
-                config=GeminiEmbedderConfig(
-                    api_key=api_key, embedding_model=settings.graph_embed_model
-                )
-            ),
-            cross_encoder=GeminiRerankerClient(
-                config=LLMConfig(api_key=api_key, model=settings.graph_llm_model)
-            ),
+            **graphiti_clients(settings),
             max_coroutines=settings.max_coroutines,
         )
 
@@ -281,26 +263,33 @@ class GraphStore:
         return nodes, edges
 
     async def episode_map(self) -> dict[str, list[str]]:
-        """episode_name -> entity uuids, for chunk provenance links."""
-        from graphiti_core.errors import GroupsNodesNotFoundError
-        from graphiti_core.nodes import EpisodicNode
+        """episode_name -> entity uuids, for provenance links.
 
+        Read from the `MENTIONS` edges Graphiti writes from each episode to
+        every entity it extracted. The obvious-looking alternative — walking an
+        episode's `entity_edges` — only finds entities that ended up on a
+        *relation*, which for this corpus was under a fifth of them: the rest
+        were extracted, stored, and then had no visible provenance at all.
+        """
+        query = (
+            "MATCH (ep:Episodic)-[:MENTIONS]->(n:Entity) "
+            "WHERE ep.group_id = $group_id "
+            "RETURN ep.name AS episode, collect(n.uuid) AS uuids"
+        )
         try:
-            episodes = await EpisodicNode.get_by_group_ids(self.client.driver, [self.group_id])
-        except GroupsNodesNotFoundError:
+            records, _, _ = await self.client.driver.execute_query(
+                query, group_id=self.group_id
+            )
+        except Exception as exc:  # a missing graph is not an error worth raising
+            print(f"[WARN] episode map unavailable ({str(exc)[:80]})")
             return {}
-        _, edges = await self.dump()
-        by_uuid = {e.uuid: e for e in edges}
 
         out: dict[str, list[str]] = {}
-        for ep in episodes:
-            entities: set[str] = set()
-            for edge_uuid in getattr(ep, "entity_edges", []) or []:
-                edge = by_uuid.get(edge_uuid)
-                if edge is not None:
-                    entities.add(edge.source_node_uuid)
-                    entities.add(edge.target_node_uuid)
-            out[ep.name] = sorted(entities)
+        for record in records or []:
+            episode = record["episode"] if "episode" in record else record[0]
+            uuids = record["uuids"] if "uuids" in record else record[1]
+            if episode:
+                out[str(episode)] = sorted({str(u) for u in uuids or []})
         return out
 
 

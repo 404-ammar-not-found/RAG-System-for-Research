@@ -16,17 +16,25 @@ export async function uploadPdf(file) {
 }
 
 export async function askQuestion(question) {
-  const response = await fetch("/api/ask", {
+  return postJson("/api/ask", { question }, "Query");
+}
+
+export async function addArxiv(url) {
+  return postJson("/api/arxiv", { url }, "Import");
+}
+
+async function postJson(path, body, what) {
+  const response = await fetch(path, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ question }),
+    body: JSON.stringify(body),
   });
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const detail = data?.detail || `Query failed (${response.status})`;
+    const detail = data?.detail || `${what} failed (${response.status})`;
     throw new Error(detail);
   }
   return data;

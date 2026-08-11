@@ -61,11 +61,30 @@ class TestBuildGraph(unittest.TestCase):
         self.assertEqual(rel[0]["label"], "EvaluatedOn")
         self.assertIn("WMT", rel[0]["fact"])
 
-    def test_every_link_endpoint_resolves_to_a_node(self):
+    def test_every_link_endpoint_resolves_to_something_real(self):
+        # A dangling endpoint is an invisible bug: the visualiser drops the
+        # link and a whole relationship silently disappears from the figure.
         ids = {n["id"] for n in self.graph["nodes"]}
+        papers = {n["group"] for n in self.graph["nodes"] if n["kind"] == "chunk"}
         for link in self.graph["links"]:
             self.assertIn(link["source"], ids)
-            self.assertIn(link["target"], ids)
+            # `from_paper` names a paper, which is not a node here — the
+            # visualiser synthesises one node per source path — so it resolves
+            # against the paper set instead.
+            expected = papers if link["kind"] == "from_paper" else ids
+            self.assertIn(link["target"], expected, link["kind"])
+
+    def test_entities_reach_their_paper_even_without_a_passage(self):
+        # References are excluded from the passage store, so entities extracted
+        # there can never link to a chunk. The episode still names the paper.
+        graph = build_graph(
+            NODES, EDGES, FakeStore(ROWS), {"p::References": ["u1", "u2"]}
+        )
+        from_paper = [l for l in graph["links"] if l["kind"] == "from_paper"]
+        self.assertEqual({l["source"] for l in from_paper}, {"u1", "u2"})
+        self.assertEqual({l["target"] for l in from_paper}, {"data/p.pdf"})
+        # That section has no chunks, so there is no passage-level provenance.
+        self.assertEqual([l for l in graph["links"] if l["kind"] == "mentions"], [])
 
     def test_no_duplicate_node_ids(self):
         # The old exporter merged into the previous file and never evicted,

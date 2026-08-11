@@ -6,7 +6,7 @@ import asyncio
 import re
 from typing import Any
 
-from .deps import get_api_key, lc_deps
+from .deps import chat_model, lc_deps
 from .graph_store import GraphStore, format_facts
 from .stance import describe_split, group_by_stance, label_stances
 from .verification import (
@@ -88,21 +88,12 @@ class QaEngine:
         self.graph = graph
         self.bm25 = Bm25Index()
         deps = lc_deps()
-        api_key = get_api_key()
-        self.llm = deps["ChatGoogleGenerativeAI"](
-            model=settings.text_llm_model,
-            google_api_key=api_key,
-            temperature=0.2,
-        )
+        self.llm = chat_model(settings, "text", temperature=0.2)
         self._chain = deps["StrOutputParser"]()
 
         # Reranking runs on the cheap model and is independent of whether
         # FalkorDB is reachable. temperature=0 because it is an ordering task.
-        self.rerank_llm = deps["ChatGoogleGenerativeAI"](
-            model=settings.graph_llm_model,
-            google_api_key=api_key,
-            temperature=0,
-        )
+        self.rerank_llm = chat_model(settings, "graph", temperature=0)
 
     def rebuild_bm25(self) -> int:
         n = self.bm25.build(self.vectordb)

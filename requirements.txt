@@ -6,7 +6,7 @@
 # async client's kwargs into the sync redis.Redis() constructor, and 8.1 added
 # an async-only `himport_registry` kwarg that the sync one rejects with a
 # TypeError before any connection is attempted.
-graphiti-core[falkordb,google-genai]==0.29.3
+graphiti-core[falkordb,google-genai,anthropic,openai]==0.29.3
 FalkorDB==1.6.2
 redis==8.0.0
 
@@ -14,11 +14,14 @@ redis==8.0.0
 chromadb==1.5.5
 rank-bm25==0.2.2
 
-# LangChain (embeddings, LLM, text splitting)
+# LangChain (embeddings, LLM, text splitting). One provider package per
+# supported API key — only the one matching your key is ever imported.
 langchain==1.2.13
 langchain-community==0.4.1
 langchain-core==1.2.23
 langchain-google-genai==4.2.1
+langchain-anthropic==1.5.3
+langchain-openai==1.4.1
 langchain-text-splitters==1.1.1
 
 # PDF parsing. NB: do NOT install the `fitz` package from PyPI — it is an

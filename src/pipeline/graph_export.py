@@ -126,6 +126,23 @@ def build_graph(
                             {"source": uuid, "target": chunk_id, "kind": "mentions"}
                         )
 
+        # Provenance: entity -> paper, for the entities the join above cannot
+        # reach. A section with no chunks has none to point at — references are
+        # excluded from the passage store on purpose, and they are where most of
+        # the author and institution entities come from. The paper is still
+        # known, because the episode is named "<stem>::<section>", so the entity
+        # gets its source paper rather than floating unattached.
+        paper_of_stem = {Path(n["group"]).stem: n["group"] for n in chunk_nodes}
+        seen: set[tuple[str, str]] = set()
+        for episode, entity_uuids in (episode_entities or {}).items():
+            source = paper_of_stem.get(str(episode).split("::", 1)[0])
+            if not source:
+                continue
+            for uuid in entity_uuids:
+                if uuid in known_entities and (uuid, source) not in seen:
+                    seen.add((uuid, source))
+                    links.append({"source": uuid, "target": source, "kind": "from_paper"})
+
     return {"nodes": nodes, "links": links}
 
 

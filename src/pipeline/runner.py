@@ -3,6 +3,7 @@ from __future__ import annotations
 """Shared runtime: opens both stores, ingests, answers. Used by the CLI and the API."""
 
 import asyncio
+from pathlib import Path
 from typing import Any
 
 from .graph_export import export_graph
@@ -46,10 +47,15 @@ class Runtime:
         if self.graph is not None:
             await self.graph.close()
 
-    async def ingest(self) -> dict[str, int]:
-        """Parse each new PDF once, feed both stores, refresh the index and export."""
+    async def ingest(self, only: Path | None = None) -> dict[str, int]:
+        """Parse each new PDF once, feed both stores, refresh the index and export.
+
+        `only` limits the run to one PDF; the default sweeps the whole directory.
+        """
         async with self._lock:
-            vectordb, chunks, sections = await asyncio.to_thread(ingest_chroma, self.settings)
+            vectordb, chunks, sections = await asyncio.to_thread(
+                ingest_chroma, self.settings, only
+            )
             self.vectordb = vectordb
             if self.qa is not None:
                 self.qa.vectordb = vectordb

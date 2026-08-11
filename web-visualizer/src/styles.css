@@ -166,7 +166,8 @@ textarea {
 
 /* -------------------------------------------------------------------- form */
 
-textarea {
+textarea,
+input[type="text"] {
   width: 100%;
   resize: vertical;
   padding: 11px 13px;
@@ -177,13 +178,30 @@ textarea {
   line-height: 1.5;
 }
 
-textarea::placeholder {
+textarea::placeholder,
+input[type="text"]::placeholder {
   color: var(--ink-3);
 }
 
-textarea:focus {
+textarea:focus,
+input[type="text"]:focus {
   border-color: var(--green);
   outline: none;
+}
+
+input[type="text"] + button,
+.file + button {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.or {
+  margin: 14px 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  text-align: center;
 }
 
 button {
@@ -452,6 +470,24 @@ figcaption {
   color: var(--ink);
   white-space: nowrap;
   padding-top: 1px;
+}
+
+/* The interaction hint sits at the far end of the caption, quieter than the
+   census it follows. */
+.fig-hint {
+  margin-left: auto;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+button.linkish {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* ------------------------------------------------------------------ legend */

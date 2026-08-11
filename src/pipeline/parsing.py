@@ -494,8 +494,16 @@ def section_to_chunks(section: Section, chunk_size: int, chunk_overlap: int) -> 
     """
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+    # The default separators bottom out at " ", so a paragraph longer than
+    # chunk_size gets cut at whatever word lands on the limit — mid-sentence.
+    # Offering sentence terminators first makes the cut land on a sentence end
+    # instead; keep_separator="end" leaves the terminator on the preceding
+    # chunk rather than deleting it (the default drops the separator entirely).
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size, chunk_overlap=chunk_overlap
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        separators=["\n\n", "\n", ". ", "? ", "! ", " ", ""],
+        keep_separator="end",
     )
     base_meta = {
         "source": section.source,

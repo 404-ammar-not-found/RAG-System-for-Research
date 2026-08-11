@@ -2,16 +2,17 @@ import React, { useEffect, useMemo, useState } from "react";
 import GlobeGraph from "./components/GlobeGraph.jsx";
 import ControlPanel from "./components/ControlPanel.jsx";
 import FigurePlate from "./components/FigurePlate.jsx";
-import { askQuestion, uploadPdf } from "./utils/api.js";
+import { addArxiv, askQuestion, uploadPdf } from "./utils/api.js";
 import {
   EMPTY_GRAPH,
   buildGraphUrl,
-  colorForGroup,
-  filterByLayer,
+  censusOf,
   hasEntities,
   isGraphShape,
   loadCachedGraph,
   saveCachedGraph,
+  viewFor,
+  withPaperHubs,
 } from "./utils/graphData.js";
 
 function endpointId(endpoint) {
@@ -22,8 +23,9 @@ function App() {
   const [search, setSearch] = useState("");
   const [showEdges, setShowEdges] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
-  const [layer, setLayer] = useState("entities");
+  const [layer, setLayer] = useState("overview");
   const [groupFilter, setGroupFilter] = useState("all");
+  const [expanded, setExpanded] = useState(() => new Set());
   const [highlightNode, setHighlightNode] = useState(null);
   const [activeNodeIds, setActiveNodeIds] = useState([]);
   const [graphData, setGraphData] = useState(EMPTY_GRAPH);
@@ -69,21 +71,29 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const coloredData = useMemo(() => {
-    const nodes = filterByLayer(graphData.nodes, layer).map((n) => {
-      const group = n.group || "ungrouped";
-      return { ...n, group, color: n.color || colorForGroup(group) };
-    });
-    const visible = new Set(nodes.map((n) => n.id));
-    const links = graphData.links.filter(
-      (l) => visible.has(endpointId(l.source)) && visible.has(endpointId(l.target))
-    );
-    return { nodes, links };
-  }, [graphData, layer]);
+  // Papers are derived once, not per layer — the hierarchy is a property of the
+  // corpus, not of what happens to be on screen.
+  const hubGraph = useMemo(() => withPaperHubs(graphData), [graphData]);
+  const census = useMemo(() => censusOf(hubGraph), [hubGraph]);
+
+  // No mapping over nodes here: colours are resolved once in `withPaperHubs`,
+  // because the simulation keeps each node's position on the object itself and
+  // a per-render copy would reset the layout (see the note in that function).
+  const coloredData = useMemo(
+    () => viewFor(hubGraph, layer, expanded),
+    [hubGraph, layer, expanded]
+  );
 
   const groups = useMemo(
-    () => ["all", ...new Set(coloredData.nodes.map((n) => n.group || "ungrouped"))],
-    [coloredData]
+    () => [
+      "all",
+      ...new Set(
+        coloredData.nodes
+          .filter((n) => (layer === "passages" ? n.kind === "paper" : n.kind === "entity"))
+          .map((n) => (layer === "passages" ? n.title || n.group : n.type || "Entity"))
+      ),
+    ],
+    [coloredData, layer]
   );
 
   const graphHasEntities = useMemo(() => hasEntities(graphData.nodes), [graphData]);
@@ -97,7 +107,11 @@ function App() {
           (n.name || "").toLowerCase().includes(needle) ||
           (n.label || "").toLowerCase().includes(needle)
         : true;
-      const matchesGroup = groupFilter === "all" || n.group === groupFilter;
+      // The filter names a paper in the passage layer and an entity type
+      // elsewhere; papers always stay, so filtering never empties the frame.
+      const facet = layer === "passages" ? n.title || n.group : n.type;
+      const matchesGroup =
+        groupFilter === "all" || n.kind === "paper" || facet === groupFilter;
       return (matchesSearch || activeSet.has(n.id)) && matchesGroup;
     });
     const ids = new Set(nodes.map((n) => n.id));
@@ -114,38 +128,33 @@ function App() {
     setGroupFilter("all");
   };
 
-  const corpus = useMemo(() => {
-    const papers = new Set();
-    let chunks = 0;
-    let entities = 0;
-    graphData.nodes.forEach((n) => {
-      if (n.kind === "entity") entities += 1;
-      else {
-        chunks += 1;
-        if (n.group) papers.add(n.group);
-      }
-    });
-    return { papers: papers.size, chunks, entities };
-  }, [graphData]);
+  const corpus = useMemo(
+    () => ({ papers: census.papers, chunks: census.passages, entities: census.entities }),
+    [census]
+  );
 
-  const handleUpload = async (file) => {
-    if (!file) return;
+  const addPaper = async (fetchPaper) => {
     try {
       setUploading(true);
       setUploadStatus("Reading, chunking and embedding — this takes a minute.");
       setError("");
-      const res = await uploadPdf(file);
+      const res = await fetchPaper();
       setUploadStatus(
         `Added ${res.filename}: ${res.newChunks} passages, ${res.newEpisodes ?? 0} graph episodes.`
       );
       await loadGraph({ preferCache: false });
+      return true;
     } catch (err) {
       setUploadStatus("");
       setError(err.message || "Could not add that paper.");
+      return false;
     } finally {
       setUploading(false);
     }
   };
+
+  const handleUpload = (file) => (file ? addPaper(() => uploadPdf(file)) : false);
+  const handleArxiv = (url) => addPaper(() => addArxiv(url));
 
   const handleAsk = async (query) => {
     if (!query) return;
@@ -158,8 +167,17 @@ function App() {
       setMatches(Array.isArray(res.matches) ? res.matches : []);
       setFacts(Array.isArray(res.facts) ? res.facts : []);
       setActiveNodeIds(used);
+      // Open the papers the answer came from, so the cited passages are on
+      // screen instead of hidden inside a collapsed hub.
+      const cited = new Set(used);
+      const papersCited = hubGraph.nodes
+        .filter((n) => n.kind === "chunk" && cited.has(n.id))
+        .map((n) => n.paper);
+      if (papersCited.length) {
+        setExpanded((prev) => new Set([...prev, ...papersCited]));
+      }
       const visible = new Set(coloredData.nodes.map((n) => n.id));
-      const focus = used.find((id) => visible.has(id));
+      const focus = used.find((id) => visible.has(id)) || papersCited[0];
       if (focus) setHighlightNode(focus);
     } catch (err) {
       setQaError(err.message || "That question could not be answered.");
@@ -176,6 +194,22 @@ function App() {
     if (!nodeId) return;
     setHighlightNode(nodeId);
     setSearch("");
+  };
+
+  // Clicking a paper opens or closes it. That is the whole navigation model:
+  // the overview stays readable, and detail is one click away where you asked
+  // for it rather than everywhere at once.
+  const clickNode = (nodeId) => {
+    if (!nodeId) return;
+    const node = hubGraph.nodes.find((n) => n.id === nodeId);
+    if (node?.kind === "paper") {
+      setExpanded((prev) => {
+        const next = new Set(prev);
+        next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
+        return next;
+      });
+    }
+    setHighlightNode(nodeId);
   };
 
   return (
@@ -212,6 +246,7 @@ function App() {
           facts={facts}
           onFocusNode={focusNode}
           onUploadFile={handleUpload}
+          onAddArxiv={handleArxiv}
           uploading={uploading}
           uploadStatus={uploadStatus}
         />
@@ -227,8 +262,15 @@ function App() {
           showLabels={showLabels}
           setShowLabels={setShowLabels}
           hasEntities={graphHasEntities}
-          nodeCount={filteredData.nodes.length}
-          linkCount={filteredData.links.length}
+          census={census}
+          shown={{ nodes: filteredData.nodes.length, links: filteredData.links.length }}
+          openCount={expanded.size}
+          onCollapseAll={() => setExpanded(new Set())}
+          onExpandAll={() =>
+            setExpanded(
+              new Set(hubGraph.nodes.filter((n) => n.kind === "paper").map((n) => n.id))
+            )
+          }
           loading={loading}
         >
           <GlobeGraph
@@ -238,7 +280,7 @@ function App() {
             showEdges={showEdges}
             showLabels={showLabels}
             onNodeHover={setHighlightNode}
-            onNodeClick={setHighlightNode}
+            onNodeClick={clickNode}
           />
         </FigurePlate>
       </main>

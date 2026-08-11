@@ -2,15 +2,17 @@ import React from "react";
 import { TYPE_COLORS } from "../utils/graphData.js";
 
 const LAYERS = [
-  ["entities", "Entities"],
-  ["chunks", "Passages"],
-  ["both", "Both"],
+  ["overview", "Overview"],
+  ["passages", "Passages"],
+  ["all", "Everything"],
 ];
 
 /**
  * The graph presented the way a paper presents a figure: a plate, then a
  * caption that says what you are looking at, then the controls. The caption is
- * live — it is the honest answer to "what is on screen right now".
+ * live — it is the honest answer to "what is on screen right now", which means
+ * it reports an empty entity layer as empty instead of captioning a cloud of
+ * passages as a knowledge graph.
  */
 function FigurePlate({
   children,
@@ -24,12 +26,38 @@ function FigurePlate({
   showLabels,
   setShowLabels,
   hasEntities,
-  nodeCount,
-  linkCount,
+  census,
+  shown,
+  openCount,
+  onCollapseAll,
+  onExpandAll,
   loading,
 }) {
-  const subject = layer === "chunks" ? "Passage map" : layer === "both" ? "Corpus map" : "Entity graph";
-  const legend = layer === "chunks" ? [] : Object.entries(TYPE_COLORS);
+  const { papers = 0, entities = 0, passages = 0 } = census || {};
+
+  const subject =
+    layer === "passages" ? "Passage map" : layer === "all" ? "Corpus map" : "Corpus overview";
+
+  const caption = () => {
+    if (loading) return "Loading corpus…";
+    const parts = [`${papers} papers`];
+    parts.push(entities ? `${entities} entities` : "no entities yet");
+    if (layer === "overview") {
+      parts.push(
+        openCount ? `${openCount} opened, ${shown.nodes} nodes drawn` : `${passages} passages folded in`
+      );
+    } else {
+      parts.push(`${passages} passages`);
+    }
+    return `${subject} — ${parts.join(", ")}.`;
+  };
+
+  // Only advertise the types actually present. A legend for eight entity types
+  // above a plate containing none of them is the figure lying about its data.
+  const legend =
+    layer === "passages"
+      ? []
+      : Object.entries(TYPE_COLORS).filter(([type]) => (census?.types || {})[type]);
 
   return (
     <div className="plate-wrap">
@@ -37,12 +65,19 @@ function FigurePlate({
         <div className="canvas">{children}</div>
         <figcaption>
           <span className="fig-no">Figure 1</span>
-          <span className="fig-text">
-            {loading
-              ? "Loading corpus…"
-              : `${subject} — ${nodeCount} nodes, ${linkCount} links.` +
-                (layer === "chunks" ? " Coloured by paper." : " Coloured by type.")}
-          </span>
+          <span className="fig-text">{caption()}</span>
+          {layer === "overview" && (
+            <span className="fig-hint">
+              Click a paper to open it, or{" "}
+              <button
+                type="button"
+                className="linkish"
+                onClick={openCount ? onCollapseAll : onExpandAll}
+              >
+                {openCount ? "close all" : "open all"}
+              </button>
+            </span>
+          )}
         </figcaption>
       </figure>
 
@@ -73,7 +108,7 @@ function FigurePlate({
         </div>
 
         <label className="inline-field">
-          <span>{layer === "chunks" ? "Paper" : "Type"}</span>
+          <span>{layer === "passages" ? "Paper" : "Type"}</span>
           <select value={groupFilter} onChange={(e) => setGroupFilter(e.target.value)}>
             {groups.map((g) => (
               <option key={g} value={g}>
@@ -104,8 +139,8 @@ function FigurePlate({
 
       {!hasEntities && !loading && (
         <p className="notice">
-          No entities yet — showing passages. Add papers and run an ingest to build the
-          knowledge graph.
+          The entity layer is empty — this shows papers and their passages only. Entities and the
+          relations between them appear once an ingest runs graph extraction.
         </p>
       )}
     </div>

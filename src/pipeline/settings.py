@@ -56,7 +56,10 @@ class PipelineSettings:
     # Check every generated sentence against the span it cited.
     verify_claims: bool = True
 
-    # Models.
+    # Models. Empty means "whatever the configured provider defaults to" —
+    # the per-provider table lives in `deps.PROVIDERS`, and `deps.model_for`
+    # resolves a slot. Set one here (or via the matching env var) to override.
+    #
     # NB: gemini-3-flash-preview has a free-tier cap of 20 generate requests
     # PER DAY, which cannot support graph extraction (~5 LLM calls per episode,
     # ~95 episodes for four papers). Answers use a full flash model; the
@@ -66,11 +69,11 @@ class PipelineSettings:
     # giving the passage store and the graph different embedding models buys
     # two independent daily budgets instead of one shared. They index separate
     # stores, so the vectors never have to be comparable across the two.
-    embed_model: str = "models/gemini-embedding-2"
-    graph_embed_model: str = "models/gemini-embedding-2-preview"
+    embed_model: str = os.getenv("EMBED_MODEL", "")
+    graph_embed_model: str = os.getenv("GRAPH_EMBED_MODEL", "")
     embed_dimensions: int | None = None
-    text_llm_model: str = "gemini-flash-latest"
-    graph_llm_model: str = "gemini-flash-lite-latest"
+    text_llm_model: str = os.getenv("TEXT_LLM_MODEL", "")
+    graph_llm_model: str = os.getenv("GRAPH_LLM_MODEL", "")
 
     # Graphiti / FalkorDB.
     # One group_id for the whole corpus: group_id partitions the graph, and

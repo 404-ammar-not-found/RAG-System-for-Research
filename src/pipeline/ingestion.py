@@ -5,7 +5,7 @@ from typing import Any
 
 from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
 
-from .deps import get_api_key, lc_deps
+from .deps import collection_for, embeddings, lc_deps
 from .parsing import Section, parse_paper, section_to_chunks
 from .settings import PipelineSettings
 
@@ -61,14 +61,9 @@ def open_vectorstore(settings: PipelineSettings) -> Any:
     changing it requires deleting the collection.
     """
     deps = lc_deps()
-    embeddings = deps["GoogleGenerativeAIEmbeddings"](
-        model=settings.embed_model,
-        google_api_key=get_api_key(),
-        dimensions=settings.embed_dimensions,
-    )
     return deps["Chroma"](
-        collection_name=settings.collection_name,
-        embedding_function=embeddings,
+        collection_name=collection_for(settings),
+        embedding_function=embeddings(settings),
         persist_directory=settings.chroma_path,
         collection_metadata={"hnsw:space": "cosine"},
     )
@@ -82,10 +77,16 @@ def _has_file_in_store(vectordb: Any, file_hash: str) -> bool:
         return False
 
 
-def pending_pdfs(vectordb: Any, settings: PipelineSettings) -> list[tuple[Path, list[Section]]]:
-    """Parse every not-yet-ingested PDF once. Sections feed Chroma and Graphiti both."""
+def pending_pdfs(
+    vectordb: Any, settings: PipelineSettings, only: Path | None = None
+) -> list[tuple[Path, list[Section]]]:
+    """Parse every not-yet-ingested PDF once. Sections feed Chroma and Graphiti both.
+
+    `only` narrows it to one file: adding a paper from the UI should cost that
+    paper's quota, not the whole directory's backlog.
+    """
     out: list[tuple[Path, list[Section]]] = []
-    for pdf_path in sorted(settings.pdf_directory.glob("*.pdf")):
+    for pdf_path in [only] if only else sorted(settings.pdf_directory.glob("*.pdf")):
         sections = parse_paper(pdf_path, settings.max_pages)
         if not sections:
             print(f"- skipping {pdf_path.name} (no text extracted)")
@@ -191,18 +192,20 @@ def index_sections(vectordb: Any, sections: list[Section], settings: PipelineSet
     return len(texts)
 
 
-def ingest_chroma(settings: PipelineSettings) -> tuple[Any, int, list[Section]]:
+def ingest_chroma(
+    settings: PipelineSettings, only: Path | None = None
+) -> tuple[Any, int, list[Section]]:
     """Ingest new PDFs into Chroma. Returns the store, chunk count, and sections.
 
     The returned sections are handed to the Graphiti layer so each PDF is parsed
-    exactly once.
+    exactly once. `only` restricts the run to a single PDF.
     """
     vectordb = open_vectorstore(settings)
-    print(f"Reading PDFs from {settings.pdf_directory.resolve()}...")
+    print(f"Reading {only.name if only else f'PDFs from {settings.pdf_directory.resolve()}'}...")
 
     total = 0
     all_sections: list[Section] = []
-    for pdf_path, sections in pending_pdfs(vectordb, settings):
+    for pdf_path, sections in pending_pdfs(vectordb, settings, only):
         print(f"- ingesting {pdf_path.name} ({len(sections)} sections)")
         try:
             total += index_sections(vectordb, sections, settings)
