@@ -1,14 +1,5 @@
-# Python 3.12+ required (falkordblite needs it; verified working on 3.14.3).
+# Python 3.12+ required (verified working on 3.14.3).
 # Install: pip install -r requirements.txt
-
-# Knowledge graph.
-# redis is pinned below 8.1: falkordb 1.6.2's Is_Cluster() probe forwards the
-# async client's kwargs into the sync redis.Redis() constructor, and 8.1 added
-# an async-only `himport_registry` kwarg that the sync one rejects with a
-# TypeError before any connection is attempted.
-graphiti-core[falkordb,google-genai,anthropic,openai]==0.29.3
-FalkorDB==1.6.2
-redis==8.0.0
 
 # Vector store + passage retrieval
 chromadb==1.5.5
@@ -18,7 +9,7 @@ rank-bm25==0.2.2
 # supported API key — only the one matching your key is ever imported.
 langchain==1.2.13
 langchain-community==0.4.1
-langchain-core==1.2.23
+langchain-core==1.5.3
 langchain-google-genai==4.2.1
 langchain-anthropic==1.5.3
 langchain-openai==1.4.1
@@ -34,3 +25,7 @@ uvicorn==0.42.0
 
 python-dotenv==1.2.2
 tenacity==9.1.4
+
+# scripts/eval_retrieval.py reads the golden set; was only installed
+# transitively via chromadb before.
+pyyaml==6.0.3

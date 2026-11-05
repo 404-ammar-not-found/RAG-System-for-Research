@@ -90,7 +90,9 @@ def chunk_health(chunks: list[dict]) -> dict:
 
 
 def is_hit(item: dict, meta: dict, text: str) -> bool:
-    if Path(str(meta.get("source", ""))).stem != item["paper"]:
+    # str() both sides: an unquoted arXiv id in golden.yaml parses as a YAML
+    # float (1412.6980 -> 1412.698) and would silently zero the question.
+    if Path(str(meta.get("source", ""))).stem != str(item["paper"]):
         return False
     low = text.lower()
     return any(c.lower() in low for c in item["contains"])
@@ -154,15 +156,11 @@ async def run_full(golden: list[dict], settings: PipelineSettings, k: int) -> di
 
     runtime = Runtime(settings)
     await runtime.start()
-    try:
-        results = []
-        for item in golden:
-            passages = await runtime.qa.retrieve(item["q"])
-            results.append((item, [(p.metadata, p.text) for p in passages]))
-        out = {"mode": "full", **score(results, k)}
-    finally:
-        await runtime.close()
-    return out
+    results = []
+    for item in golden:
+        passages = await runtime.qa.retrieve(item["q"])
+        results.append((item, [(p.metadata, p.text) for p in passages]))
+    return {"mode": "full", **score(results, k)}
 
 
 def main() -> None:

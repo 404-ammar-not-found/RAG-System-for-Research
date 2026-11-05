@@ -89,6 +89,8 @@ class PaperRecord:
     doi: str | None = None
     arxiv_id: str | None = None
     arxiv_doi: str | None = None
+    openalex_id: str | None = None
+    authors: list[str] = field(default_factory=list)
     citation_count: int | None = None
     is_retracted: bool = False
     retraction_note: str | None = None
@@ -224,6 +226,11 @@ def from_arxiv(arxiv_id: str, record: PaperRecord) -> bool:
         record.venue = " ".join(journal.group(1).split())
     if doi and not record.doi:
         record.doi = doi.group(1).strip()
+    if not record.authors:
+        record.authors = [
+            " ".join(name.split())
+            for name in re.findall(r"<author>\s*<name>([^<]+)</name>", entry)
+        ]
     record.arxiv_id = arxiv_id
     return True
 
@@ -257,6 +264,10 @@ def from_openalex(record: PaperRecord) -> bool:
         # a 2025 work before the 2017 one.
         if not (record.year and c.get("publication_year")
                 and abs(c["publication_year"] - record.year) > 1)
+        # And a superstring title, a different paper again: a title search for
+        # "Generative Adversarial Networks" returns DCGAN ("... with Deep
+        # Convolutional Generative Adversarial Networks") above the original.
+        and _title_close(record.title, c.get("title") or "")
     ]
     if not candidates:
         return False
@@ -273,6 +284,13 @@ def from_openalex(record: PaperRecord) -> bool:
 def _apply_openalex(record: PaperRecord, work: dict[str, Any]) -> None:
     record.title = record.title or (work.get("title") or "")
     record.year = record.year or work.get("publication_year")
+    record.openalex_id = work.get("id")
+    if not record.authors:
+        record.authors = [
+            a["author"]["display_name"]
+            for a in work.get("authorships") or []
+            if (a.get("author") or {}).get("display_name")
+        ]
     record.citation_count = work.get("cited_by_count")
     if work.get("is_retracted"):
         record.is_retracted = True
@@ -378,7 +396,136 @@ def fetch_citers(record: PaperRecord, limit: int = 10) -> None:
         record.resolved_by.append("semanticscholar")
 
 
+# ------------------------------------------------------------------ bibtex
+
+
+_TEX_SPECIALS = {
+    "\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#",
+    "_": r"\_", "{": r"\{", "}": r"\}", "~": r"\textasciitilde{}",
+    "^": r"\textasciicircum{}",
+}
+_CONF_VENUE = re.compile(
+    r"conference|proceedings|symposium|workshop|neurips|nips|icml|iclr|cvpr|iccv|acl\b|emnlp"
+    r"|neural information processing",
+    re.I,
+)
+_KEY_STOPWORDS = {"a", "an", "the", "on", "of", "for", "and", "in", "to", "with"}
+
+
+def _tex_escape(text: str) -> str:
+    return "".join(_TEX_SPECIALS.get(ch, ch) for ch in text)
+
+
+def _bibtex_key(record: PaperRecord) -> str:
+    """firstauthorYEARfirstword, e.g. vaswani2017attention."""
+    tokens = record.authors[0].split() if record.authors else []
+    last = tokens[-1] if tokens else "anon"
+    year = str(record.year) if record.year else "nd"
+    word = next(
+        (w for w in re.findall(r"[A-Za-z]+", record.title)
+         if len(w) > 3 and w.lower() not in _KEY_STOPWORDS),
+        "untitled",
+    )
+    return re.sub(r"[^a-z0-9]", "", f"{last}{year}{word}".lower())
+
+
+def to_bibtex(record: PaperRecord) -> str:
+    """One BibTeX entry. Partial metadata degrades the entry, never fails it."""
+    # A 10.48550 arXiv DOI resolves nowhere (see extract_ids) but can sit in old
+    # cache entries via the OpenAlex path — never emit one.
+    doi = record.doi if record.doi and not record.doi.lower().startswith("10.48550") else None
+    venue = record.venue or ""
+    if venue and _CONF_VENUE.search(venue):
+        entry, venue_field = "inproceedings", "booktitle"
+    elif venue and doi:
+        entry, venue_field = "article", "journal"
+    else:
+        entry, venue_field = "misc", None
+
+    fields: list[tuple[str, str]] = []
+    if record.authors:
+        fields.append(("author", " and ".join(_tex_escape(a) for a in record.authors)))
+    if record.title:
+        fields.append(("title", "{" + _tex_escape(record.title) + "}"))
+    if venue_field:
+        fields.append((venue_field, _tex_escape(venue)))
+    if record.year:
+        fields.append(("year", str(record.year)))
+    if doi:
+        fields.append(("doi", doi))
+    if record.arxiv_id:
+        fields.append(("eprint", record.arxiv_id))
+        fields.append(("archivePrefix", "arXiv"))
+        if entry == "misc":
+            fields.append(("url", f"https://arxiv.org/abs/{record.arxiv_id}"))
+    if record.is_retracted:
+        fields.append(("note", "Retracted"))
+
+    body = ",\n".join(f"  {name} = {{{value}}}" for name, value in fields)
+    return f"@{entry}{{{_bibtex_key(record)},\n{body}\n}}\n"
+
+
+# ------------------------------------------------------------- citation map
+
+
+def citation_edges(records: dict[str, PaperRecord]) -> list[tuple[str, str]]:
+    """Corpus-internal (citing, cited) pairs, matched on OpenAlex work ids."""
+    by_id = {r.openalex_id: name for name, r in records.items() if r.openalex_id}
+    return [
+        (name, by_id[ref])
+        for name, rec in records.items()
+        for ref in rec.reference_ids
+        if by_id.get(ref) and by_id[ref] != name
+    ]
+
+
+def corpus_graph(pdf_paths: list[Path]) -> dict[str, Any]:
+    """Literature map for the papers on disk, from cached records only.
+
+    Deliberately never resolves a cache miss — resolve_paper's miss path writes
+    a (possibly empty) record, and a browsing endpoint should not spend network
+    or poison the cache. Old cache entries that already resolved via OpenAlex
+    but predate openalex_id get backfilled once.
+    """
+    cache = _load_cache()
+    records: dict[str, PaperRecord] = {}
+    dirty = False
+    for pdf in pdf_paths:
+        pdf = Path(pdf)
+        key = _cache_key(extract_ids(pdf), pdf)
+        if key not in cache:
+            continue
+        record = PaperRecord(**{k: v for k, v in cache[key].items()
+                                if k in PaperRecord.__dataclass_fields__})
+        if not record.openalex_id and "openalex" in record.resolved_by:
+            if from_openalex(record):
+                record.resolved_by = list(dict.fromkeys(record.resolved_by))
+                cache[key] = asdict(record)
+                dirty = True
+        records[pdf.stem] = record
+    if dirty:
+        _save_cache(cache)
+
+    return {
+        "papers": [
+            {
+                "file": name,
+                "title": r.title,
+                "year": r.year,
+                "citationCount": r.citation_count,
+                "citers": r.citers,
+            }
+            for name, r in records.items()
+        ],
+        "edges": [[a, b] for a, b in citation_edges(records)],
+    }
+
+
 # ------------------------------------------------------------------- cache
+
+
+def _cache_key(ids: dict[str, str | None], pdf_path: Path) -> str:
+    return ids["arxiv_id"] or ids["doi"] or Path(pdf_path).stem
 
 
 def _load_cache() -> dict[str, Any]:
@@ -436,10 +583,12 @@ def resolve_paper(
     """Resolve one paper's bibliographic record, cached on disk."""
     pdf_path = Path(pdf_path)
     ids = extract_ids(pdf_path)
-    key = ids["arxiv_id"] or ids["doi"] or pdf_path.stem
+    key = _cache_key(ids, pdf_path)
 
     cache = _load_cache()
-    if not refresh and key in cache:
+    # Entries written before author capture lack the key entirely; re-resolve
+    # those once instead of serving author-less records forever.
+    if not refresh and key in cache and "authors" in cache[key]:
         return PaperRecord(**cache[key])
 
     record = PaperRecord(key=key, arxiv_id=ids["arxiv_id"], doi=ids["doi"], title=title_hint)
@@ -468,6 +617,9 @@ def warn_lines(record: PaperRecord) -> list[str]:
 
 __all__ = [
     "PaperRecord",
+    "citation_edges",
+    "corpus_graph",
+    "to_bibtex",
     "find_arxiv_by_title",
     "from_semantic_scholar",
     "check_retraction",

@@ -204,5 +204,78 @@ class TestBibliographicResolution(unittest.TestCase):
         self.assertTrue(any("RETRACTED" in l for l in warn_lines(rec)))
 
 
+class TestBibtexExport(unittest.TestCase):
+    def test_conference_paper_is_inproceedings_with_generated_key(self):
+        from src.pipeline.scholarly import PaperRecord, to_bibtex
+
+        entry = to_bibtex(PaperRecord(
+            key="x", title="Attention Is All You Need",
+            authors=["Ashish Vaswani", "Noam Shazeer"], year=2017,
+            venue="Neural Information Processing Systems", arxiv_id="1706.03762",
+        ))
+        self.assertIn("@inproceedings{vaswani2017attention,", entry)
+        self.assertIn("author = {Ashish Vaswani and Noam Shazeer}", entry)
+        self.assertIn("booktitle = {Neural Information Processing Systems}", entry)
+        self.assertIn("eprint = {1706.03762}", entry)
+
+    def test_journal_paper_with_doi_is_article(self):
+        from src.pipeline.scholarly import PaperRecord, to_bibtex
+
+        entry = to_bibtex(PaperRecord(
+            key="x", title="Some Study", authors=["A B"], year=2020,
+            venue="Nature Machine Intelligence", doi="10.1038/xyz",
+        ))
+        self.assertIn("@article{b2020some,", entry)
+        self.assertIn("journal = {Nature Machine Intelligence}", entry)
+        self.assertIn("doi = {10.1038/xyz}", entry)
+
+    def test_arxiv_only_is_misc_with_eprint_and_url(self):
+        from src.pipeline.scholarly import PaperRecord, to_bibtex
+
+        entry = to_bibtex(PaperRecord(key="x", title="Adam", arxiv_id="1412.6980"))
+        self.assertIn("@misc{", entry)
+        self.assertIn("archivePrefix = {arXiv}", entry)
+        self.assertIn("url = {https://arxiv.org/abs/1412.6980}", entry)
+
+    def test_bare_record_still_parses_with_fallback_key(self):
+        from src.pipeline.scholarly import PaperRecord, to_bibtex
+
+        entry = to_bibtex(PaperRecord(key="x"))
+        self.assertIn("@misc{anonnduntitled,", entry)
+        self.assertNotIn("author =", entry)
+
+    def test_arxiv_doi_is_never_emitted(self):
+        from src.pipeline.scholarly import PaperRecord, to_bibtex
+
+        entry = to_bibtex(PaperRecord(
+            key="x", title="T", arxiv_id="1406.2661", doi="10.48550/arxiv.1406.2661",
+        ))
+        self.assertNotIn("10.48550", entry.replace("url = {https://arxiv.org", ""))
+        self.assertNotIn("doi =", entry)
+
+    def test_retracted_note_and_tex_escaping(self):
+        from src.pipeline.scholarly import PaperRecord, to_bibtex
+
+        entry = to_bibtex(PaperRecord(
+            key="x", title="Results & 100% of #cases_with", is_retracted=True,
+        ))
+        self.assertIn("note = {Retracted}", entry)
+        self.assertIn(r"Results \& 100\% of \#cases\_with", entry)
+
+    def test_cache_round_trip_preserves_authors_and_tolerates_old_entries(self):
+        from dataclasses import asdict
+
+        from src.pipeline.scholarly import PaperRecord
+
+        rec = PaperRecord(key="x", authors=["A B"], openalex_id="W1")
+        again = PaperRecord(**asdict(rec))
+        self.assertEqual(again.authors, ["A B"])
+        self.assertEqual(again.openalex_id, "W1")
+        # A pre-upgrade cache entry lacks the new keys entirely.
+        old = PaperRecord(key="x")
+        self.assertEqual(old.authors, [])
+        self.assertIsNone(old.openalex_id)
+
+
 if __name__ == "__main__":
     unittest.main()

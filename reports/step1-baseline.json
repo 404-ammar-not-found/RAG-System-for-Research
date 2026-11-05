@@ -1,0 +1,37 @@
+{
+  "mode": "offline",
+  "health": {
+    "chunks": 949,
+    "papers": 12,
+    "hyphen_breaks": 0,
+    "reference_chunks": 0,
+    "starts_mid_sentence": 85,
+    "orphan_chunks": 25,
+    "size_mean": 881,
+    "size_median": 870,
+    "size_max": 3115,
+    "content_types": {
+      "prose": 717,
+      "figure": 108,
+      "algorithm": 5,
+      "table": 100,
+      "math": 19
+    }
+  },
+  "recall@8": 0.773,
+  "mrr": 0.583,
+  "hits": "17/22",
+  "by_kind": {
+    "conceptual": "5/5",
+    "factual": "7/12",
+    "math": "2/2",
+    "table": "3/3"
+  },
+  "misses": [
+    "How many parameters does AlexNet have?",
+    "What optimiser and learning rate schedule trained the Transformer?",
+    "How deep was the deepest ResNet evaluated on ImageNet?",
+    "What tokenizer does BERT use?",
+    "How many parameters does GPT-3 have?"
+  ]
+}

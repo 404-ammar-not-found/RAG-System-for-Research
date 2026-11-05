@@ -4,6 +4,11 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# The env-backed defaults below are read when this module is imported.
+load_dotenv()
+
 
 @dataclass
 class PipelineSettings:
@@ -25,22 +30,18 @@ class PipelineSettings:
     max_pages: int | None = 200
     # Bibliographies are 14% of embed spend and pure retrieval noise — nobody
     # asks what is in one, but they compete for every top-k slot. Measured:
-    # keeping them drops recall@8 from 0.273 to 0.227. They are also what
-    # `Cites` edges are built from, so flip this on when graph quota allows.
+    # keeping them drops recall@8 from 0.273 to 0.227.
     index_references: bool = False
 
     # Retrieval
     candidate_k: int = 25  # per channel, before fusion
     top_k: int = 8  # passages sent to the LLM
-    fact_k: int = 10  # graph facts sent to the LLM
     use_reranker: bool = True
     debug_retrieval: bool = True
 
     # Stop one paper monopolising the results. Measured before this existed:
     # 6 of the top 8 passages for one question came from a single paper.
     max_per_source: int = 4
-    # RRF bonus for passages naming an entity from a retrieved graph fact.
-    graph_boost: float = 0.01
     # Pull prev/next chunks of the top hits so the LLM reads contiguous text.
     # Free: fetched by id, no embedding, no search.
     neighbour_expansion: bool = True
@@ -55,42 +56,20 @@ class PipelineSettings:
     cluster_stance: bool = True
     # Check every generated sentence against the span it cited.
     verify_claims: bool = True
+    # One cheap-model call after each answer proposing follow-up questions.
+    suggest_followups: bool = True
 
     # Models. Empty means "whatever the configured provider defaults to" —
     # the per-provider table lives in `deps.PROVIDERS`, and `deps.model_for`
     # resolves a slot. Set one here (or via the matching env var) to override.
     #
-    # NB: gemini-3-flash-preview has a free-tier cap of 20 generate requests
-    # PER DAY, which cannot support graph extraction (~5 LLM calls per episode,
-    # ~95 episodes for four papers). Answers use a full flash model; the
-    # high-volume paths — Graphiti extraction and passage reranking, both
-    # structured/classification work — use a lite model.
-    # Embedding quota is metered PER MODEL (1000/day on the free tier), so
-    # giving the passage store and the graph different embedding models buys
-    # two independent daily budgets instead of one shared. They index separate
-    # stores, so the vectors never have to be comparable across the two.
+    # Answers use the full model; the high-volume classification paths —
+    # reranking, stance labelling, claim verification — use the cheap model
+    # (the `graph` slot, named for the graph-extraction work it once also did).
     embed_model: str = os.getenv("EMBED_MODEL", "")
-    graph_embed_model: str = os.getenv("GRAPH_EMBED_MODEL", "")
     embed_dimensions: int | None = None
     text_llm_model: str = os.getenv("TEXT_LLM_MODEL", "")
     graph_llm_model: str = os.getenv("GRAPH_LLM_MODEL", "")
-
-    # Graphiti / FalkorDB.
-    # One group_id for the whole corpus: group_id partitions the graph, and
-    # cross-paper entity resolution ("Transformer" in two papers = one node) is
-    # the entire point of building it.
-    graphiti_group_id: str = "papers"
-    # Passed to Graphiti as max_coroutines. Do NOT rely on the SEMAPHORE_LIMIT
-    # env var instead: graphiti_core.helpers reads it at *import* time, which
-    # happens before load_dotenv(), so a value in .env is silently ignored and
-    # you get the default of 20 concurrent ops straight into a 100/min quota.
-    max_coroutines: int = 2
-    # 6380, not redis' default 6379 — this machine already runs a plain
-    # redis-server there, and connecting to it fails with "unknown command
-    # GRAPH.QUERY" rather than anything that looks like a port clash.
-    falkordb_host: str = os.getenv("FALKORDB_HOST", "localhost")
-    falkordb_port: int = int(os.getenv("FALKORDB_PORT", "6380"))
-    falkordb_database: str = "papers"
 
 
 __all__ = ["PipelineSettings"]

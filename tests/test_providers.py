@@ -1,4 +1,6 @@
 import os
+import subprocess
+import sys
 import unittest
 from unittest import mock
 
@@ -132,8 +134,7 @@ class ModelResolution(unittest.TestCase):
         self._with(ANTHROPIC_API_KEY="x", GEMINI_API_KEY="y", LLM_PROVIDER="anthropic")
         s = PipelineSettings(text_llm_model="", graph_llm_model="", embed_model="")
         self.assertEqual(deps.model_for(s, "text"), "claude-opus-5")
-        # Graph work runs on the cheap model, and Graphiti always sends
-        # temperature — which the Claude 5 series rejects.
+        # Reranking/classification work runs on the cheap model.
         self.assertEqual(deps.model_for(s, "graph"), "claude-haiku-4-5")
         # Vectors fall through to the Gemini key.
         self.assertEqual(deps.model_for(s, "embed"), "models/gemini-embedding-2")
@@ -142,6 +143,22 @@ class ModelResolution(unittest.TestCase):
         self._with(GEMINI_API_KEY="x")
         s = PipelineSettings(text_llm_model="my-model")
         self.assertEqual(deps.model_for(s, "text"), "my-model")
+
+
+class DotenvOverrides(unittest.TestCase):
+    def test_settings_see_models_from_dotenv(self):
+        # Defaults are read at import, so .env must load before the class body.
+        code = (
+            "import os, dotenv\n"
+            "dotenv.load_dotenv = lambda *a, **k: os.environ.update(TEXT_LLM_MODEL='from-dotenv')\n"
+            "from src.pipeline.settings import PipelineSettings\n"
+            "print(PipelineSettings().text_llm_model)"
+        )
+        environ = {k: v for k, v in os.environ.items() if k != "TEXT_LLM_MODEL"}
+        out = subprocess.run(
+            [sys.executable, "-c", code], capture_output=True, text=True, env=environ, check=True
+        )
+        self.assertEqual(out.stdout.strip(), "from-dotenv")
 
 
 if __name__ == "__main__":

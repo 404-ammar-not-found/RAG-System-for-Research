@@ -28,6 +28,7 @@ from typing import Any
 from .deps import message_text
 
 # [chunk-id "verbatim quote"] — the quote is what makes the citation checkable.
+# Mirrored in web-visualizer/src/utils/citations.js (CITE_RE) — keep in sync.
 CITATION_RE = re.compile(r"\[([A-Za-z0-9._-]+chunk-\d+)(?:\s+\"([^\"]{4,400})\")?\]")
 SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z(])")
 

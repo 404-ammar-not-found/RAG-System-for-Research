@@ -1,11 +1,40 @@
 import unittest
 
 from src.pipeline.qa import _strip_unknown_citations
-from src.pipeline.retrieval import Passage, rrf_fuse
+from src.pipeline.retrieval import Bm25Index, Passage, _tokenize, rrf_fuse
 
 
 def p(pid):
     return Passage(id=pid, text=f"text-{pid}", metadata={"id": pid})
+
+
+class TestTokenize(unittest.TestCase):
+    def test_greek_glyphs_become_spelled_names(self):
+        tokens = _tokenize("β1 = 0.9 and ε = 10−8")
+        self.assertIn("beta1", tokens)
+        self.assertIn("epsilon", tokens)
+
+    def test_typed_name_and_glyph_produce_the_same_token(self):
+        self.assertEqual(_tokenize("β2"), _tokenize("beta2"))
+
+    def test_uppercase_greek_folds_onto_the_same_name(self):
+        self.assertIn("sigma", _tokenize("Σ over all i"))
+
+    def test_symbol_document_found_by_spelled_query(self):
+        index = Bm25Index()
+        # Three docs: BM25Okapi's idf is exactly 0 for a term in 1-of-2 docs.
+        index.load_texts(
+            [
+                ("1", "good default settings are β1 = 0.9 and β2 = 0.999",
+                 {"id": "1", "content_type": "prose"}),
+                ("2", "residual connections ease optimisation",
+                 {"id": "2", "content_type": "prose"}),
+                ("3", "attention heads attend to positions",
+                 {"id": "3", "content_type": "prose"}),
+            ]
+        )
+        hits = index.search("beta1 default value", k=1)
+        self.assertEqual(hits[0].metadata["id"], "1")
 
 
 class TestRrfFuse(unittest.TestCase):

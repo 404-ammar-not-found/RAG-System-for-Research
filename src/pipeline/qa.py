@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-"""Answer generation: graph facts + passages, one LLM call."""
+"""Answer generation: retrieved passages, one streaming LLM call."""
 
-import asyncio
+import json
 import re
+from collections.abc import AsyncIterator
 from typing import Any
 
-from .deps import chat_model, lc_deps
-from .graph_store import GraphStore, format_facts
+from .deps import chat_model, lc_deps, message_text
 from .stance import describe_split, group_by_stance, label_stances
 from .verification import (
     CITATION_RE,
@@ -21,17 +21,7 @@ from .settings import PipelineSettings
 
 PROMPT = """You are a research assistant answering questions about a corpus of academic papers.
 
-You have two kinds of evidence.
-
-KNOWLEDGE GRAPH FACTS — relations extracted across the whole corpus. Use these to \
-reason about how papers, models, datasets and methods relate to each other, and to \
-notice connections that span more than one paper. Facts are LLM-derived summaries, so \
-do not quote them as the paper's own words, and where a fact and a passage disagree, \
-the passage wins.
-
-{facts}
-
-{split}PASSAGES — verbatim excerpts, in reading order. Ground every specific claim (numbers, \
+{history}{split}PASSAGES — verbatim excerpts, in reading order. Ground every specific claim (numbers, \
 quotes, architectural details) in these.
 
 Cite like this, with the passage id AND a short verbatim quote copied exactly from \
@@ -51,12 +41,37 @@ alignment is lost, so a number's row and column heading are inferred, not certai
 attribute such numbers only when the caption or nearby text makes the mapping clear.
 - A passage marked [math] is a display equation flattened onto one line.
 
+The passages often use standard concepts (softmax, dropout, convolution) without \
+defining them. When the question asks what such a concept is and no passage defines \
+it, explain it plainly from your own knowledge, without citations, and say in one \
+short phrase that the explanation is general background rather than from these \
+papers. Then connect it to how these papers use the concept, citing passages as \
+usual. Never attach a citation to a claim its passage does not support.
+
 {passages}
 
 {cautions}Question: {question}
 
-Answer the question directly. Cite passage ids for specific claims. If the evidence \
-does not cover the question, say so plainly rather than speculating."""
+Answer the question directly. Cite passage ids for specific claims. Write any \
+mathematics in LaTeX ($...$ inline, $$...$$ display) — but citation quotes must stay \
+verbatim from the passage, never rewritten as LaTeX. If the evidence does not cover \
+the question, say so plainly rather than speculating."""
+
+CONDENSE_PROMPT = """Rewrite the user's latest message as ONE standalone search query, \
+resolving any pronouns or references using the conversation. Reply with only the query.
+
+{history}
+
+Latest message: {question}"""
+
+FOLLOWUP_PROMPT = """A user asked a question about a corpus of academic papers and got \
+this answer. Suggest 3 short, distinct follow-up questions likely answerable from the \
+same papers. Reply with only a JSON array of 3 strings.
+
+Question: {question}
+
+Answer: {answer}"""
+
 
 def _strip_unknown_citations(answer: str, valid_ids: set[str]) -> tuple[str, list[str]]:
     """Drop citations to ids that were never retrieved; keep the rest verbatim.
@@ -79,20 +94,58 @@ def _strip_unknown_citations(answer: str, valid_ids: set[str]) -> tuple[str, lis
     return re.sub(r"[ \t]{2,}", " ", cleaned), used
 
 
-class QaEngine:
-    """Holds the warm clients: vector store, BM25 index, graph, LLM."""
+def _format_history(history: list[dict[str, str]], max_turns: int = 6) -> str:
+    """The last few turns as a prompt block, truncated per message."""
+    lines = []
+    for msg in history[-max_turns:]:
+        role = "User" if msg.get("role") == "user" else "Assistant"
+        text = (msg.get("content") or "").strip()
+        if len(text) > 1500:
+            text = text[:1500] + " …"
+        lines.append(f"{role}: {text}")
+    return "\n".join(lines)
 
-    def __init__(self, settings: PipelineSettings, vectordb: Any, graph: GraphStore | None) -> None:
+
+async def _condense(llm: Any, history: list[dict[str, str]], question: str) -> str:
+    """One cheap-model call turning a follow-up into a standalone retrieval query."""
+    try:
+        raw = await llm.ainvoke(
+            CONDENSE_PROMPT.format(history=_format_history(history), question=question)
+        )
+        text = message_text(raw).strip().strip('"')
+        return text.splitlines()[0].strip() if text else question
+    except Exception as exc:
+        print(f"[WARN] condense failed ({str(exc)[:100]}); using raw question")
+        return question
+
+
+async def _suggest_followups(llm: Any, question: str, answer: str) -> list[str]:
+    """One cheap-model call proposing follow-ups. Degrades to none."""
+    try:
+        raw = await llm.ainvoke(
+            FOLLOWUP_PROMPT.format(question=question, answer=answer[:3000])
+        )
+        match = re.search(r"\[.*\]", message_text(raw), re.S)
+        items = json.loads(match.group(0)) if match else []
+        return [s.strip() for s in items if isinstance(s, str) and s.strip()][:3]
+    except Exception as exc:
+        print(f"[WARN] followup suggestions failed ({str(exc)[:100]})")
+        return []
+
+
+class QaEngine:
+    """Holds the warm clients: vector store, BM25 index, LLM."""
+
+    def __init__(self, settings: PipelineSettings, vectordb: Any) -> None:
         self.settings = settings
         self.vectordb = vectordb
-        self.graph = graph
         self.bm25 = Bm25Index()
         deps = lc_deps()
         self.llm = chat_model(settings, "text", temperature=0.2)
         self._chain = deps["StrOutputParser"]()
 
-        # Reranking runs on the cheap model and is independent of whether
-        # FalkorDB is reachable. temperature=0 because it is an ordering task.
+        # Reranking, stance labelling and verification run on the cheap model.
+        # temperature=0 because they are ordering/classification tasks.
         self.rerank_llm = chat_model(settings, "graph", temperature=0)
 
     def rebuild_bm25(self) -> int:
@@ -125,12 +178,7 @@ class QaEngine:
         lines = [f"- {w['paper']}: {w['message']}" for w in self._warnings(passages)]
         return "CAUTIONS\n" + "\n".join(lines) + "\n\n" if lines else ""
 
-    async def _facts(self, question: str) -> list[Any]:
-        if self.graph is None:
-            return []
-        return await self.graph.search_facts(question, self.settings.fact_k)
-
-    async def retrieve(self, question: str, facts: list[Any] | None = None) -> list[Passage]:
+    async def retrieve(self, question: str) -> list[Passage]:
         """Retrieval only, no answer generation. Used by the eval harness."""
         return await retrieve_passages(
             self.vectordb,
@@ -138,17 +186,28 @@ class QaEngine:
             question,
             self.settings,
             self.rerank_llm,
-            facts=facts,
         )
 
-    async def answer(self, question: str) -> dict[str, Any]:
-        settings = self.settings
+    async def answer_stream(
+        self, question: str, history: list[dict[str, str]] | None = None
+    ) -> AsyncIterator[dict[str, Any]]:
+        """Yield {"type": "token"} events while generating, then one {"type": "done"}.
 
-        # Facts first: they are a rerank signal for the passages, so the two
-        # channels stop ignoring each other.
-        graph_facts = await self._facts(question)
-        passages = await self.retrieve(question, facts=graph_facts)
-        debug(settings.debug_retrieval, f"passages={len(passages)} facts={len(graph_facts)}")
+        The streamed tokens are the raw answer; the done event carries the
+        cleaned answer (unknown citations stripped) plus verification, stances
+        and passages, because those are post-hoc by design.
+        """
+        settings = self.settings
+        history = history or []
+
+        yield {"type": "stage", "name": "retrieving"}
+        search_query = question
+        if history:
+            search_query = await _condense(self.rerank_llm, history, question)
+            debug(settings.debug_retrieval, f"condensed query: {search_query}")
+
+        passages = await self.retrieve(search_query)
+        debug(settings.debug_retrieval, f"passages={len(passages)}")
 
         # Cluster by stance *before* synthesis. Doing it after means the model
         # has already blended the conflict into one confident paragraph.
@@ -160,17 +219,26 @@ class QaEngine:
             if split:
                 debug(settings.debug_retrieval, "disagreement detected in retrieved evidence")
 
+        hist_block = _format_history(history)
         prompt = PROMPT.format(
-            facts=format_facts(graph_facts) or "(none retrieved)",
+            history=f"CONVERSATION SO FAR\n{hist_block}\n\n" if hist_block else "",
             passages=format_passages(passages) or "(none retrieved)",
             question=question,
             example_id=passages[0].id if passages else "paper-abc12345-chunk-0",
             split=f"{split}\n\n" if split else "",
             cautions=self._cautions(passages),
         )
-        raw = await self.llm.ainvoke(prompt)
-        answer = self._chain.invoke(raw)
 
+        yield {"type": "stage", "name": "writing"}
+        parts: list[str] = []
+        async for chunk in self.llm.astream(prompt):
+            text = message_text(chunk)
+            if text:
+                parts.append(text)
+                yield {"type": "token", "text": text}
+        answer = "".join(parts)
+
+        yield {"type": "stage", "name": "verifying"}
         valid_ids = {p.id for p in passages if p.id}
         answer, cited = _strip_unknown_citations(answer, valid_ids)
 
@@ -189,31 +257,29 @@ class QaEngine:
                 f"{len(report['flagged'])} claim(s) flagged: {report['counts']}",
             )
 
-        entity_uuids: list[str] = []
-        for edge in graph_facts:
-            for uuid in (edge.source_node_uuid, edge.target_node_uuid):
-                if uuid not in entity_uuids:
-                    entity_uuids.append(uuid)
+        suggestions: list[str] = []
+        if settings.suggest_followups and answer.strip():
+            suggestions = await _suggest_followups(self.rerank_llm, question, answer)
 
-        return {
+        yield {
+            "type": "done",
             "answer": answer.strip(),
+            "suggestions": suggestions,
             "claims": to_payload(claims),
             "verification": report,
             "stances": labels,
             "warnings": self._warnings(passages),
             "matches": [p.as_match() for p in passages],
-            "facts": [
-                {
-                    "name": getattr(e, "name", ""),
-                    "fact": e.fact,
-                    "source": e.source_node_uuid,
-                    "target": e.target_node_uuid,
-                }
-                for e in graph_facts
-            ],
-            # Both layers, so the visualizer can highlight whichever is showing.
-            "usedNodeIds": (cited or [p.id for p in passages if p.id]) + entity_uuids,
+            "usedNodeIds": cited or [p.id for p in passages if p.id],
         }
+
+    async def answer(self, question: str) -> dict[str, Any]:
+        """Drain the stream and return the final payload. CLI/eval entry point."""
+        payload: dict[str, Any] = {}
+        async for event in self.answer_stream(question):
+            if event["type"] == "done":
+                payload = {k: v for k, v in event.items() if k != "type"}
+        return payload
 
 
 __all__ = ["QaEngine", "Passage"]

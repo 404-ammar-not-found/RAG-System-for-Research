@@ -80,7 +80,7 @@ def _has_file_in_store(vectordb: Any, file_hash: str) -> bool:
 def pending_pdfs(
     vectordb: Any, settings: PipelineSettings, only: Path | None = None
 ) -> list[tuple[Path, list[Section]]]:
-    """Parse every not-yet-ingested PDF once. Sections feed Chroma and Graphiti both.
+    """Parse every not-yet-ingested PDF once.
 
     `only` narrows it to one file: adding a paper from the UI should cost that
     paper's quota, not the whole directory's backlog.
@@ -197,8 +197,7 @@ def ingest_chroma(
 ) -> tuple[Any, int, list[Section]]:
     """Ingest new PDFs into Chroma. Returns the store, chunk count, and sections.
 
-    The returned sections are handed to the Graphiti layer so each PDF is parsed
-    exactly once. `only` restricts the run to a single PDF.
+    `only` restricts the run to a single PDF.
     """
     vectordb = open_vectorstore(settings)
     print(f"Reading {only.name if only else f'PDFs from {settings.pdf_directory.resolve()}'}...")

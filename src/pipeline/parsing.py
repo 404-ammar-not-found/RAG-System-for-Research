@@ -2,8 +2,7 @@ from __future__ import annotations
 
 """Section-aware PDF parsing.
 
-One parse feeds both consumers: Graphiti episodes (section granularity) and
-Chroma chunks (blocks within a section).
+One parse feeds Chroma chunks: sections, then blocks within a section.
 
 The hard part is not finding sections, it is that a PDF has no paragraphs. Every
 visual line arrives as its own string, words are hyphenated across line ends, and
@@ -89,7 +88,7 @@ class Block:
 
 @dataclass
 class Section:
-    """A titled span of a paper. The unit of Graphiti episode ingestion."""
+    """A titled span of a paper."""
 
     paper_title: str
     section: str
@@ -102,11 +101,6 @@ class Section:
     @property
     def paper_stem(self) -> str:
         return Path(self.source).stem
-
-    @property
-    def episode_name(self) -> str:
-        """Join key between a Graphiti episode and its Chroma chunks."""
-        return f"{self.paper_stem}::{self.section}"
 
     @property
     def is_reference(self) -> bool:
@@ -176,7 +170,18 @@ def _paper_title(doc: pymupdf.Document, body: float) -> str:
     top_size = max(size for _, size, _ in lines)
     if top_size <= body:
         return lines[0][0]
-    return " ".join(t for t, s, _ in lines if s >= top_size - 0.5).strip()[:200]
+    title = " ".join(t for t, s, _ in lines if s >= top_size - 0.5).strip()[:200]
+    # A hyphen at a joined line end is a word break ("LAN- GUAGE"), not a
+    # compound ("Low-Rank" never gets a space).
+    return re.sub(r"(\w)- (\w)", r"\1\2", title)
+
+
+def pdf_title(pdf_path: Path) -> str:
+    """Title of a PDF from its first page, without a full parse."""
+    with pymupdf.open(pdf_path) as doc:
+        if doc.page_count == 0:
+            return ""
+        return _paper_title(doc, _body_size(_lines_with_sizes(doc[0])))
 
 
 # ---------------------------------------------------------------------------
@@ -450,8 +455,8 @@ def parse_paper(pdf_path: Path, max_pages: int | None = 200) -> list[Section]:
         if not text:
             continue
 
-        # Episodes are capped for extraction quality; blocks ride with the first
-        # piece since Graphiti only consumes `text`.
+        # Sections are capped so a giant one still chunks cleanly; blocks ride
+        # with the first piece.
         for i, part in enumerate(_split_long(text, EPISODE_MAX_CHARS)):
             parts_name = bucket["section"]
             sections.append(
@@ -541,6 +546,7 @@ __all__ = [
     "Section",
     "build_blocks",
     "parse_paper",
+    "pdf_title",
     "reflow",
     "section_to_chunks",
 ]

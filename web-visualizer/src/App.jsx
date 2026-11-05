@@ -1,137 +1,155 @@
-import React, { useEffect, useMemo, useState } from "react";
-import GlobeGraph from "./components/GlobeGraph.jsx";
-import ControlPanel from "./components/ControlPanel.jsx";
-import FigurePlate from "./components/FigurePlate.jsx";
-import { addArxiv, askQuestion, uploadPdf } from "./utils/api.js";
-import {
-  EMPTY_GRAPH,
-  buildGraphUrl,
-  censusOf,
-  hasEntities,
-  isGraphShape,
-  loadCachedGraph,
-  saveCachedGraph,
-  viewFor,
-  withPaperHubs,
-} from "./utils/graphData.js";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import ChatThread from "./components/ChatThread.jsx";
+import LiteratureMap from "./components/LiteratureMap.jsx";
+import Sidebar from "./components/Sidebar.jsx";
+import { addArxiv, deletePaper, getPapers, streamChat, uploadPdf } from "./utils/api.js";
 
-function endpointId(endpoint) {
-  return endpoint && typeof endpoint === "object" ? endpoint.id : endpoint;
-}
+const STORAGE_KEY = "research-chat-conversations";
+
+const loadConversations = () => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return Array.isArray(raw) ? raw : [];
+  } catch {
+    return [];
+  }
+};
+
+const newConversation = () => ({
+  id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+  title: "",
+  messages: [],
+});
 
 function App() {
-  const [search, setSearch] = useState("");
-  const [showEdges, setShowEdges] = useState(true);
-  const [showLabels, setShowLabels] = useState(true);
-  const [layer, setLayer] = useState("overview");
-  const [groupFilter, setGroupFilter] = useState("all");
-  const [expanded, setExpanded] = useState(() => new Set());
-  const [highlightNode, setHighlightNode] = useState(null);
-  const [activeNodeIds, setActiveNodeIds] = useState([]);
-  const [graphData, setGraphData] = useState(EMPTY_GRAPH);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [conversations, setConversations] = useState(loadConversations);
+  const [activeId, setActiveId] = useState(() => conversations[0]?.id ?? null);
+  const [streaming, setStreaming] = useState(false);
+  const [papers, setPapers] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
-  const [asking, setAsking] = useState(false);
-  const [answer, setAnswer] = useState("");
-  const [qaError, setQaError] = useState("");
-  const [matches, setMatches] = useState([]);
-  const [facts, setFacts] = useState([]);
-
-  const loadGraph = async ({ preferCache = true } = {}) => {
-    const cached = preferCache ? loadCachedGraph() : null;
-    if (cached) {
-      setGraphData(cached);
-      setLoading(false);
-    }
-    try {
-      const res = await fetch(buildGraphUrl(), { cache: "no-cache" });
-      if (!res.ok) throw new Error(`Failed to load data (${res.status})`);
-      const json = await res.json();
-      const next = isGraphShape(json) ? json : EMPTY_GRAPH;
-      setGraphData(next);
-      saveCachedGraph(next);
-      setError("");
-    } catch (err) {
-      console.error(err);
-      if (!cached) setGraphData(EMPTY_GRAPH);
-      setError(
-        cached
-          ? "Showing a cached copy — could not reach the latest graph."
-          : "No graph data yet. Run an ingest to build one."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [jobs, setJobs] = useState([]);
+  const [error, setError] = useState("");
+  const [view, setView] = useState("chat");
+  const [dragging, setDragging] = useState(false);
+  const abortRef = useRef(null);
 
   useEffect(() => {
-    loadGraph();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    } catch {
+      /* storage full or unavailable — chat still works, history just won't persist */
+    }
+  }, [conversations]);
+
+  useEffect(() => {
+    getPapers().then(setPapers).catch(() => {});
   }, []);
 
-  // Papers are derived once, not per layer — the hierarchy is a property of the
-  // corpus, not of what happens to be on screen.
-  const hubGraph = useMemo(() => withPaperHubs(graphData), [graphData]);
-  const census = useMemo(() => censusOf(hubGraph), [hubGraph]);
-
-  // No mapping over nodes here: colours are resolved once in `withPaperHubs`,
-  // because the simulation keeps each node's position on the object itself and
-  // a per-render copy would reset the layout (see the note in that function).
-  const coloredData = useMemo(
-    () => viewFor(hubGraph, layer, expanded),
-    [hubGraph, layer, expanded]
+  const active = useMemo(
+    () => conversations.find((c) => c.id === activeId) ?? null,
+    [conversations, activeId]
   );
 
-  const groups = useMemo(
-    () => [
-      "all",
-      ...new Set(
-        coloredData.nodes
-          .filter((n) => (layer === "passages" ? n.kind === "paper" : n.kind === "entity"))
-          .map((n) => (layer === "passages" ? n.title || n.group : n.type || "Entity"))
-      ),
-    ],
-    [coloredData, layer]
-  );
+  const patchConversation = (id, patch) =>
+    setConversations((prev) => prev.map((c) => (c.id === id ? patch(c) : c)));
 
-  const graphHasEntities = useMemo(() => hasEntities(graphData.nodes), [graphData]);
+  const patchLastMessage = (id, patch) =>
+    patchConversation(id, (c) => ({
+      ...c,
+      messages: c.messages.map((m, i) => (i === c.messages.length - 1 ? patch(m) : m)),
+    }));
 
-  const filteredData = useMemo(() => {
-    const activeSet = new Set(activeNodeIds);
-    const needle = search.toLowerCase();
-    const nodes = coloredData.nodes.filter((n) => {
-      const matchesSearch = needle
-        ? n.id.toLowerCase().includes(needle) ||
-          (n.name || "").toLowerCase().includes(needle) ||
-          (n.label || "").toLowerCase().includes(needle)
-        : true;
-      // The filter names a paper in the passage layer and an entity type
-      // elsewhere; papers always stay, so filtering never empties the frame.
-      const facet = layer === "passages" ? n.title || n.group : n.type;
-      const matchesGroup =
-        groupFilter === "all" || n.kind === "paper" || facet === groupFilter;
-      return (matchesSearch || activeSet.has(n.id)) && matchesGroup;
-    });
-    const ids = new Set(nodes.map((n) => n.id));
-    return {
-      nodes,
-      links: coloredData.links.filter(
-        (l) => ids.has(endpointId(l.source)) && ids.has(endpointId(l.target))
-      ),
-    };
-  }, [search, groupFilter, coloredData, activeNodeIds]);
+  const stopStreaming = () => abortRef.current?.abort();
 
-  const changeLayer = (next) => {
-    setLayer(next);
-    setGroupFilter("all");
+  // `base` overrides the conversation's messages (used by regenerate to
+  // truncate the thread before resending).
+  const sendMessage = async (text, base = null) => {
+    abortRef.current?.abort();
+    let convo = active;
+    if (!convo) {
+      convo = newConversation();
+      setConversations((prev) => [convo, ...prev]);
+      setActiveId(convo.id);
+    }
+    const id = convo.id;
+    const baseMessages = base ?? convo.messages;
+    const history = baseMessages
+      .filter((m) => !m.error)
+      .map((m) => ({ role: m.role, content: m.content || "" }));
+
+    patchConversation(id, (c) => ({
+      ...c,
+      title: c.title || text.slice(0, 60),
+      messages: [
+        ...baseMessages,
+        { role: "user", content: text },
+        { role: "assistant", content: "", streaming: true, stage: "retrieving" },
+      ],
+    }));
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+    // A stream that dies after tokens keeps the partial text instead of
+    // replacing it with the error.
+    const interrupt = (note) =>
+      patchLastMessage(id, (m) =>
+        m.content
+          ? { ...m, streaming: false, interrupted: true, note }
+          : { ...m, streaming: false, error: note }
+      );
+
+    setStreaming(true);
+    try {
+      await streamChat(
+        [...history, { role: "user", content: text }],
+        (event) => {
+          if (event.type === "token") {
+            patchLastMessage(id, (m) => ({ ...m, content: m.content + event.text }));
+          } else if (event.type === "stage") {
+            patchLastMessage(id, (m) => ({ ...m, stage: event.name }));
+          } else if (event.type === "done") {
+            patchLastMessage(id, () => ({
+              role: "assistant",
+              content: event.answer || "",
+              matches: event.matches || [],
+              claims: event.claims || [],
+              verification: event.verification || null,
+              stances: event.stances || {},
+              warnings: event.warnings || [],
+              suggestions: event.suggestions || [],
+            }));
+          } else if (event.type === "error") {
+            interrupt(event.detail);
+          }
+        },
+        controller.signal
+      );
+    } catch (err) {
+      interrupt(
+        controller.signal.aborted
+          ? "Stopped."
+          : err.message || "That question could not be answered."
+      );
+    } finally {
+      if (abortRef.current === controller) abortRef.current = null;
+      setStreaming(false);
+    }
   };
 
-  const corpus = useMemo(
-    () => ({ papers: census.papers, chunks: census.passages, entities: census.entities }),
-    [census]
-  );
+  const regenerate = () => {
+    if (!active || streaming) return;
+    const msgs = active.messages;
+    let i = msgs.length - 1;
+    while (i >= 0 && msgs[i].role !== "user") i--;
+    if (i < 0) return;
+    sendMessage(msgs[i].content, msgs.slice(0, i));
+  };
+
+  const selectConversation = (id) => {
+    abortRef.current?.abort();
+    setActiveId(id);
+  };
 
   const addPaper = async (fetchPaper) => {
     try {
@@ -139,10 +157,8 @@ function App() {
       setUploadStatus("Reading, chunking and embedding — this takes a minute.");
       setError("");
       const res = await fetchPaper();
-      setUploadStatus(
-        `Added ${res.filename}: ${res.newChunks} passages, ${res.newEpisodes ?? 0} graph episodes.`
-      );
-      await loadGraph({ preferCache: false });
+      setUploadStatus(`Added ${res.filename}: ${res.newChunks} passages.`);
+      setPapers(await getPapers());
       return true;
     } catch (err) {
       setUploadStatus("");
@@ -153,137 +169,128 @@ function App() {
     }
   };
 
-  const handleUpload = (file) => (file ? addPaper(() => uploadPdf(file)) : false);
-  const handleArxiv = (url) => addPaper(() => addArxiv(url));
-
-  const handleAsk = async (query) => {
-    if (!query) return;
-    try {
-      setAsking(true);
-      setQaError("");
-      const res = await askQuestion(query);
-      const used = Array.isArray(res.usedNodeIds) ? res.usedNodeIds : [];
-      setAnswer(res.answer || "");
-      setMatches(Array.isArray(res.matches) ? res.matches : []);
-      setFacts(Array.isArray(res.facts) ? res.facts : []);
-      setActiveNodeIds(used);
-      // Open the papers the answer came from, so the cited passages are on
-      // screen instead of hidden inside a collapsed hub.
-      const cited = new Set(used);
-      const papersCited = hubGraph.nodes
-        .filter((n) => n.kind === "chunk" && cited.has(n.id))
-        .map((n) => n.paper);
-      if (papersCited.length) {
-        setExpanded((prev) => new Set([...prev, ...papersCited]));
+  const addFiles = async (fileList) => {
+    const pdfs = Array.from(fileList).filter(
+      (f) => f.type === "application/pdf" || /\.pdf$/i.test(f.name)
+    );
+    if (!pdfs.length) return false;
+    setUploading(true);
+    setUploadStatus("");
+    setError("");
+    setJobs(pdfs.map((f) => ({ name: f.name, status: "queued", detail: "" })));
+    const setJob = (i, patch) =>
+      setJobs((prev) => prev.map((j, k) => (k === i ? { ...j, ...patch } : j)));
+    // ponytail: sequential uploads — server ingest is synchronous behind a
+    // global lock, so parallel POSTs would only queue there anyway.
+    for (let i = 0; i < pdfs.length; i++) {
+      setJob(i, { status: "ingesting" });
+      try {
+        const res = await uploadPdf(pdfs[i]);
+        setJob(i, { status: "done", detail: `${res.newChunks} passages` });
+      } catch (err) {
+        setJob(i, { status: "failed", detail: err.message || "failed" });
       }
-      const visible = new Set(coloredData.nodes.map((n) => n.id));
-      const focus = used.find((id) => visible.has(id)) || papersCited[0];
-      if (focus) setHighlightNode(focus);
+    }
+    getPapers().then(setPapers).catch(() => {});
+    setUploading(false);
+    return true;
+  };
+
+  const removePaper = async (file) => {
+    try {
+      setError("");
+      await deletePaper(file);
+      setPapers(await getPapers());
     } catch (err) {
-      setQaError(err.message || "That question could not be answered.");
-      setAnswer("");
-      setMatches([]);
-      setFacts([]);
-      setActiveNodeIds([]);
-    } finally {
-      setAsking(false);
+      setError(err.message || "Could not remove that paper.");
     }
   };
 
-  const focusNode = (nodeId) => {
-    if (!nodeId) return;
-    setHighlightNode(nodeId);
-    setSearch("");
+  const deleteConversation = (id) => {
+    setConversations((prev) => prev.filter((c) => c.id !== id));
+    if (id === activeId) setActiveId(null);
   };
 
-  // Clicking a paper opens or closes it. That is the whole navigation model:
-  // the overview stays readable, and detail is one click away where you asked
-  // for it rather than everywhere at once.
-  const clickNode = (nodeId) => {
-    if (!nodeId) return;
-    const node = hubGraph.nodes.find((n) => n.id === nodeId);
-    if (node?.kind === "paper") {
-      setExpanded((prev) => {
-        const next = new Set(prev);
-        next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
-        return next;
-      });
-    }
-    setHighlightNode(nodeId);
-  };
+  const renameConversation = (id, title) =>
+    patchConversation(id, (c) => ({ ...c, title: title.trim() || c.title }));
 
   return (
-    <div className="app">
+    <div
+      className={`app${dragging ? " dragging" : ""}`}
+      onDragOver={(e) => {
+        if (e.dataTransfer?.types?.includes("Files")) {
+          e.preventDefault();
+          setDragging(true);
+        }
+      }}
+      onDragLeave={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setDragging(false);
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragging(false);
+        if (e.dataTransfer?.files?.length && !uploading) addFiles(e.dataTransfer.files);
+      }}
+    >
       <header className="masthead">
         <div className="wordmark">
-          <span className="mark">Research</span> Knowledge Graph
+          <span className="mark">Research</span> Assistant
         </div>
+        <nav className="viewtoggle">
+          <button
+            type="button"
+            className={view === "chat" ? "active" : ""}
+            onClick={() => setView("chat")}
+          >
+            Chat
+          </button>
+          <button
+            type="button"
+            className={view === "map" ? "active" : ""}
+            onClick={() => setView("map")}
+          >
+            Map
+          </button>
+        </nav>
         <dl className="stats">
           <div>
             <dt>Papers</dt>
-            <dd>{corpus.papers || "—"}</dd>
-          </div>
-          <div>
-            <dt>Passages</dt>
-            <dd>{corpus.chunks || "—"}</dd>
-          </div>
-          <div>
-            <dt>Entities</dt>
-            <dd>{corpus.entities || "—"}</dd>
+            <dd>{papers.length || "—"}</dd>
           </div>
         </dl>
       </header>
 
-      {error && <div className="banner">{error}</div>}
-
       <main className="layout">
-        <ControlPanel
-          onAsk={handleAsk}
-          asking={asking}
-          answer={answer}
-          qaError={qaError}
-          matches={matches}
-          facts={facts}
-          onFocusNode={focusNode}
-          onUploadFile={handleUpload}
-          onAddArxiv={handleArxiv}
+        <Sidebar
+          conversations={conversations}
+          activeId={activeId}
+          onSelect={selectConversation}
+          onNew={() => selectConversation(null)}
+          onDelete={deleteConversation}
+          onRename={renameConversation}
+          papers={papers}
+          onDeletePaper={removePaper}
+          onUploadFiles={(files) => (files?.length ? addFiles(files) : false)}
+          onAddArxiv={(url) => addPaper(() => addArxiv(url))}
           uploading={uploading}
           uploadStatus={uploadStatus}
+          jobs={jobs}
+          error={error}
         />
-
-        <FigurePlate
-          layer={layer}
-          setLayer={changeLayer}
-          groupFilter={groupFilter}
-          setGroupFilter={setGroupFilter}
-          groups={groups}
-          showEdges={showEdges}
-          setShowEdges={setShowEdges}
-          showLabels={showLabels}
-          setShowLabels={setShowLabels}
-          hasEntities={graphHasEntities}
-          census={census}
-          shown={{ nodes: filteredData.nodes.length, links: filteredData.links.length }}
-          openCount={expanded.size}
-          onCollapseAll={() => setExpanded(new Set())}
-          onExpandAll={() =>
-            setExpanded(
-              new Set(hubGraph.nodes.filter((n) => n.kind === "paper").map((n) => n.id))
-            )
-          }
-          loading={loading}
-        >
-          <GlobeGraph
-            data={filteredData}
-            highlightNode={highlightNode}
-            activeNodeIds={activeNodeIds}
-            showEdges={showEdges}
-            showLabels={showLabels}
-            onNodeHover={setHighlightNode}
-            onNodeClick={clickNode}
+        {view === "chat" ? (
+          <ChatThread
+            messages={active?.messages ?? []}
+            streaming={streaming}
+            onSend={sendMessage}
+            onStop={stopStreaming}
+            onRegenerate={regenerate}
+            papers={papers}
           />
-        </FigurePlate>
+        ) : (
+          <LiteratureMap paperCount={papers.length} />
+        )}
       </main>
+      {dragging && <div className="dropzone-hint">Drop PDFs to add them to the corpus</div>}
     </div>
   );
 }

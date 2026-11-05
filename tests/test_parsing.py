@@ -26,10 +26,6 @@ class TestParsePaper(unittest.TestCase):
         for s in self.sections:
             self.assertLessEqual(len(s.text), EPISODE_MAX_CHARS, s.section)
 
-    def test_episode_name_joins_stem_and_section(self):
-        s = self.sections[0]
-        self.assertEqual(s.episode_name, f"{PDF.stem}::{s.section}")
-
     def test_chunks_carry_context_header_not_file_path(self):
         section = next(s for s in self.sections if len(s.text) > 500)
         chunks = section_to_chunks(section, chunk_size=1200, chunk_overlap=150)

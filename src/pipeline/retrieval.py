@@ -45,8 +45,25 @@ def debug(enabled: bool, message: str) -> None:
         print(f"[DEBUG] {message}")
 
 
+# ponytail: naive glyph map so a typed "beta1" finds a corpus "β1"; extend the
+# table if the corpus grows symbols beyond these.
+_GREEK = {
+    "α": "alpha", "β": "beta", "γ": "gamma", "δ": "delta", "ε": "epsilon",
+    "ϵ": "epsilon", "ζ": "zeta", "η": "eta", "θ": "theta", "κ": "kappa",
+    "λ": "lambda", "μ": "mu", "ν": "nu", "ξ": "xi", "π": "pi", "ρ": "rho",
+    "σ": "sigma", "τ": "tau", "φ": "phi", "χ": "chi", "ψ": "psi", "ω": "omega",
+}
+_GREEK_TRANS = str.maketrans({g: f" {name} " for g, name in _GREEK.items()})
+# A glyph with an attached digit is a subscripted symbol: β1 → beta1, the token
+# a user typing "beta1" produces. A spaced number ("ε = 10") must NOT join.
+_GREEK_SUB = re.compile(rf"([{''.join(_GREEK)}])(\d)")
+
+
 def _tokenize(text: str) -> list[str]:
-    return re.sub(r"[^\w\s]", " ", text.lower()).split()
+    text = text.lower()  # folds uppercase Greek onto the lowercase keys
+    text = _GREEK_SUB.sub(lambda m: f" {_GREEK[m.group(1)]}{m.group(2)} ", text)
+    text = text.translate(_GREEK_TRANS)
+    return re.sub(r"[^\w\s]", " ", text).split()
 
 
 def body_of(text: str) -> str:
@@ -181,9 +198,9 @@ RERANK_SNIPPET = 500
 async def rerank(llm: Any, query: str, passages: list[Passage], limit: int) -> list[Passage]:
     """Listwise rerank in ONE LLM call. Falls back to RRF order on any failure.
 
-    Graphiti's GeminiRerankerClient scores pointwise — one API call per passage,
-    so 25 candidates cost 25 calls per question. One listwise call does the same
-    job, and lets the model compare candidates against each other rather than
+    A pointwise cross-encoder costs one API call per passage, so 25 candidates
+    cost 25 calls per question. One listwise call does the same job, and lets
+    the model compare candidates against each other rather than
     scoring each in isolation.
     """
     if len(passages) <= 1:
@@ -252,31 +269,6 @@ def cap_per_source(passages: list[Passage], max_per_source: int) -> list[Passage
     # Overflow is not discarded, just demoted — a genuinely single-paper
     # question should still be answerable.
     return kept + overflow
-
-
-def boost_by_facts(passages: list[Passage], facts: list[Any], weight: float) -> list[Passage]:
-    """Nudge up passages whose text mentions an entity named in a retrieved fact.
-
-    This is the one place the symbolic and neural channels can inform each
-    other, and it is free — the facts were already fetched for the prompt.
-    """
-    if not facts or weight <= 0:
-        return passages
-    names: set[str] = set()
-    for edge in facts:
-        for token in re.findall(r"[A-Z][A-Za-z0-9.\-]{2,}", getattr(edge, "fact", "") or ""):
-            names.add(token.lower())
-    if not names:
-        return passages
-
-    for p in passages:
-        low = body_of(p.text).lower()
-        overlap = sum(1 for n in names if n in low)
-        if overlap:
-            p.score += weight * min(overlap, 3)
-            if "graph" not in p.channels:
-                p.channels.append("graph")
-    return sorted(passages, key=lambda x: x.score, reverse=True)
 
 
 def expand_neighbours(
@@ -367,7 +359,6 @@ async def retrieve_passages(
     query: str,
     settings: Any,
     rerank_llm: Any | None = None,
-    facts: list[Any] | None = None,
 ) -> list[Passage]:
     """Dense + BM25 concurrently, RRF-fused, diversified, reranked, expanded."""
     queries = [query]
@@ -387,7 +378,6 @@ async def retrieve_passages(
         (f"dense{i or ''}", d) for i, d in enumerate(dense_lists)
     ]
     fused = rrf_fuse(*channels)
-    fused = boost_by_facts(fused, facts or [], settings.graph_boost)
     fused = cap_per_source(fused, settings.max_per_source)
     debug(settings.debug_retrieval, f"fused unique candidates={len(fused)}")
 
@@ -430,7 +420,6 @@ __all__ = [
     "Bm25Index",
     "Passage",
     "body_of",
-    "boost_by_facts",
     "cap_per_source",
     "debug",
     "dense_search",
