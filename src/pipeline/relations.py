@@ -13,6 +13,7 @@ still has to be cited to a passage and pass verification.
 
 import json
 import re
+import unicodedata
 from itertools import combinations
 from pathlib import Path
 from typing import Any
@@ -44,7 +45,8 @@ def norm_label(label: str) -> str:
 
 def _squash(text: str) -> str:
     """Letters and digits only, so line breaks and hyphenation cannot hide a title."""
-    return re.sub(r"[^a-z0-9]", "", text.lower())
+    # NFKC first: PDFs print "fi" as one ligature character, which would be deleted.
+    return re.sub(r"[^a-z0-9]", "", unicodedata.normalize("NFKC", text).lower())
 
 
 def _paper_id(stem: str) -> str:

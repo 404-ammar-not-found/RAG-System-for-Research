@@ -183,16 +183,28 @@ about 19,000 input and 32,000 output tokens on GLM 5.3. Graphify also installs a
 grammars that this project never uses. Without `graph.json` the app runs on dense and BM25 alone;
 set `relation_graph=False` in `PipelineSettings` to turn the feature off.
 
-**Status: not yet measured.** The code has unit tests, but the full-library extraction has not
-finished, so its effect on retrieval is unknown. Compare with:
+**Results.** Retrieval over the 34 golden questions, with local embeddings and no reranker:
 
-```bash
-python scripts/eval_retrieval.py --full --no-rerank --baseline reports/graph-off.json
-```
+| Setup | Found (recall@8) | MRR | Relational questions |
+|---|---|---|---|
+| BM25 alone | 27/34 (0.794) | 0.637 | 6/8 |
+| Dense + BM25 | 26/34 (0.765) | 0.551 | 6/8 |
+| Dense + BM25 + graph | 27/34 (0.794) | 0.629 | 7/8 |
 
-The baseline, without the graph or reranker and with local embeddings, is recall@8 **0.647**
-(22/34), MRR **0.291**, and **4/8** on relational questions. Those 8 questions were written before
-the graph existed, but they were written for this feature, so treat them as a targeted check.
+The graph gains one question and improves ranking over dense + BM25, but only matches BM25 alone. On
+a set this small that is not evidence of a real retrieval improvement. The 8 relational questions
+were written before the graph existed, but for this feature, so they are a targeted check.
+
+The clearer gain is the citation map: 24 links between library papers, up from 8.
+
+**Known limits.**
+
+- Only 11 of the 12 papers have concepts. Extraction of GPT-3 (`2005.14165`) was stopped after about
+  45 minutes without a result. Re-running `build_relations.py` resumes it.
+- Only about 15 of 414 concepts span more than one paper, because merging needs matching labels.
+- Concept matching is broad: "Transformer" also selects Vision Transformer, so some relationships
+  shown for a question are off-topic.
+- `scripts/eval_answers.py` measures citation accuracy, but no result is committed yet.
 
 ## Chunking
 
@@ -234,7 +246,11 @@ python scripts/eval_retrieval.py --offline --report-cost   # zero API calls
 python scripts/eval_retrieval.py --full                    # costs quota
 python scripts/eval_retrieval.py --offline --baseline reports/final.json
 python scripts/eval_retrieval.py --full --no-graph --no-rerank   # dense + BM25, no LLM calls
+python scripts/eval_answers.py --save reports/answers.json       # citation accuracy, slow and paid
 ```
+
+`--full` scores ranking before neighbour expansion. Expansion re-sorts passages by document
+position, so scoring after it measures reading order rather than ranking.
 
 `--offline` scores the golden set (`tests/eval/golden.yaml`) through BM25 only and reports chunk
 health, using the *same* `build_chunk_records` the real ingest uses — so it measures the chunks

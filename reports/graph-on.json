@@ -1,0 +1,23 @@
+{
+  "mode": "full",
+  "recall@8": 0.794,
+  "mrr": 0.629,
+  "hits": "27/34",
+  "by_kind": {
+    "conceptual": "5/5",
+    "definition": "4/4",
+    "factual": "8/12",
+    "math": "1/2",
+    "relational": "7/8",
+    "table": "2/3"
+  },
+  "misses": [
+    "How many parameters does AlexNet have?",
+    "What optimiser and learning rate schedule trained the Transformer?",
+    "How deep was the deepest ResNet evaluated on ImageNet?",
+    "What top-5 error did ResNet achieve on the ImageNet test set?",
+    "What epsilon does Adam use by default?",
+    "How many times fewer trainable parameters does LoRA use than full fine-tuning?",
+    "Which convolutional network from 2012 did later ImageNet work such as ResNet build on, and what activation did it use?"
+  ]
+}

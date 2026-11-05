@@ -87,6 +87,11 @@ class TitleCitations(unittest.TestCase):
         texts = {"bert": "[12] A. Vaswani. Atten-\ntion is all\nyou need. NeurIPS", "attn": "Attention Is All You Need"}
         self.assertEqual(title_citations(texts, TITLES), [("bert", "attn")])
 
+    def test_matches_a_title_printed_with_a_ligature(self):
+        texts = {"resnet": "[21] ImageNet classi\ufb01cation with deep convolutional networks", "alexnet": ""}
+        titles = {"alexnet": ["ImageNet Classification with Deep Convolutional Networks"]}
+        self.assertEqual(title_citations(texts, titles), [("resnet", "alexnet")])
+
     def test_ignores_titles_too_short_to_be_distinctive(self):
         self.assertEqual(title_citations({"a": "we use deep nets", "b": "x"}, {"b": ["Deep nets"]}), [])
 

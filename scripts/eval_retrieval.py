@@ -163,6 +163,20 @@ async def run_full(golden: list[dict], settings: PipelineSettings, k: int) -> di
     return {"mode": "full", **score(results, k)}
 
 
+def build_settings(args: argparse.Namespace) -> PipelineSettings:
+    return PipelineSettings(
+        pdf_directory=REPO_ROOT / "data",
+        chroma_path=str(REPO_ROOT / "chroma_db"),
+        debug_retrieval=False,
+        top_k=args.k,
+        relation_graph=not args.no_graph,
+        use_reranker=not args.no_rerank,
+        # Expansion re-sorts passages by document position, so scoring after it
+        # would measure reading order rather than ranking.
+        neighbour_expansion=False,
+    )
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--full", action="store_true", help="hit the live index (costs quota)")
@@ -176,14 +190,7 @@ def main() -> None:
     args = ap.parse_args()
 
     golden = yaml.safe_load(GOLDEN.read_text())
-    settings = PipelineSettings(
-        pdf_directory=REPO_ROOT / "data",
-        chroma_path=str(REPO_ROOT / "chroma_db"),
-        debug_retrieval=False,
-        top_k=args.k,
-        relation_graph=not args.no_graph,
-        use_reranker=not args.no_rerank,
-    )
+    settings = build_settings(args)
 
     report = (
         asyncio.run(run_full(golden, settings, args.k))
