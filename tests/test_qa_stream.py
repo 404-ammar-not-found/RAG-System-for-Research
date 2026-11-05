@@ -32,6 +32,33 @@ def make_engine(**settings):
     return engine
 
 
+class CapturingLLM(FakeLLM):
+    def astream(self, prompt):
+        self.prompt = prompt
+        return super().astream(prompt)
+
+
+class FakeRelations:
+    def facts(self, question):
+        return [
+            {"source": "BERT", "relation": "implements", "target": "Transformer", "paper": "bert", "confidence": "EXTRACTED"}
+        ]
+
+
+class TestRelationsInAnswers(unittest.TestCase):
+    def test_relationships_reach_the_prompt_and_the_done_event(self):
+        engine = make_engine()
+        engine.llm = CapturingLLM(tokens=["Hi."])
+        engine.relations = FakeRelations()
+
+        async def run():
+            return [e async for e in engine.answer_stream("what uses the transformer?")]
+
+        done = asyncio.run(run())[-1]
+        self.assertIn("BERT -[implements]-> Transformer", engine.llm.prompt)
+        self.assertEqual(done["relations"], FakeRelations().facts(""))
+
+
 class TestAnswerStream(unittest.TestCase):
     def collect(self, engine):
         async def run():

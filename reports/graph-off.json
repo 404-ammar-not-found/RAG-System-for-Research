@@ -1,0 +1,28 @@
+{
+  "mode": "full",
+  "recall@8": 0.647,
+  "mrr": 0.291,
+  "hits": "22/34",
+  "by_kind": {
+    "conceptual": "4/5",
+    "definition": "4/4",
+    "factual": "7/12",
+    "math": "2/2",
+    "relational": "4/8",
+    "table": "1/3"
+  },
+  "misses": [
+    "What dropout rate did AlexNet use in its fully-connected layers?",
+    "How many parameters does AlexNet have?",
+    "Why does AlexNet use ReLU instead of tanh?",
+    "What BLEU score did the big Transformer reach on WMT 2014 English-to-German?",
+    "What BLEU score did the Transformer reach on English-to-French?",
+    "How deep was the deepest ResNet evaluated on ImageNet?",
+    "What pre-training dataset does the Vision Transformer rely on for best results?",
+    "How many times fewer trainable parameters does LoRA use than full fine-tuning?",
+    "Which paper in this library applies a pure Transformer to sequences of image patches?",
+    "Which paper makes large pre-trained language models cheaper to fine-tune through low-rank updates?",
+    "What optimizer did the Transformer paper train with, and how does that optimizer adapt its learning rates?",
+    "Which convolutional network from 2012 did later ImageNet work such as ResNet build on, and what activation did it use?"
+  ]
+}

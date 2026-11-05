@@ -359,8 +359,9 @@ async def retrieve_passages(
     query: str,
     settings: Any,
     rerank_llm: Any | None = None,
+    relations: Any | None = None,
 ) -> list[Passage]:
-    """Dense + BM25 concurrently, RRF-fused, diversified, reranked, expanded."""
+    """Dense + BM25 + graph concurrently, RRF-fused, diversified, reranked, expanded."""
     queries = [query]
     if settings.expand_queries and rerank_llm is not None:
         queries = await expand_query(rerank_llm, query)
@@ -377,6 +378,12 @@ async def retrieve_passages(
     channels = [("bm25", lexical)] + [
         (f"dense{i or ''}", d) for i, d in enumerate(dense_lists)
     ]
+    if relations is not None and settings.relation_graph:
+        from .relations import graph_search  # relations imports this module
+
+        linked = await asyncio.to_thread(graph_search, bm25, relations, query, settings.candidate_k)
+        debug(settings.debug_retrieval, f"graph={len(linked)}")
+        channels.append(("graph", linked))
     fused = rrf_fuse(*channels)
     fused = cap_per_source(fused, settings.max_per_source)
     debug(settings.debug_retrieval, f"fused unique candidates={len(fused)}")

@@ -117,6 +117,7 @@ function App() {
               verification: event.verification || null,
               stances: event.stances || {},
               warnings: event.warnings || [],
+              relations: event.relations || [],
               suggestions: event.suggestions || [],
             }));
           } else if (event.type === "error") {

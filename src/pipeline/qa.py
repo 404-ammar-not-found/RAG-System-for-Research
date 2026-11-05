@@ -16,12 +16,13 @@ from .verification import (
     to_payload,
     verify_claims,
 )
+from .relations import format_relations
 from .retrieval import Bm25Index, Passage, debug, format_passages, retrieve_passages
 from .settings import PipelineSettings
 
 PROMPT = """You are a research assistant answering questions about a corpus of academic papers.
 
-{history}{split}PASSAGES — verbatim excerpts, in reading order. Ground every specific claim (numbers, \
+{history}{split}{relations}PASSAGES — verbatim excerpts, in reading order. Ground every specific claim (numbers, \
 quotes, architectural details) in these.
 
 Cite like this, with the passage id AND a short verbatim quote copied exactly from \
@@ -136,6 +137,8 @@ async def _suggest_followups(llm: Any, question: str, answer: str) -> list[str]:
 class QaEngine:
     """Holds the warm clients: vector store, BM25 index, LLM."""
 
+    relations: Any | None = None  # RelationGraph, once one has been built
+
     def __init__(self, settings: PipelineSettings, vectordb: Any) -> None:
         self.settings = settings
         self.vectordb = vectordb
@@ -186,6 +189,7 @@ class QaEngine:
             question,
             self.settings,
             self.rerank_llm,
+            self.relations,
         )
 
     async def answer_stream(
@@ -219,6 +223,12 @@ class QaEngine:
             if split:
                 debug(settings.debug_retrieval, "disagreement detected in retrieved evidence")
 
+        facts = (
+            self.relations.facts(search_query)
+            if self.relations is not None and settings.relation_graph
+            else []
+        )
+
         hist_block = _format_history(history)
         prompt = PROMPT.format(
             history=f"CONVERSATION SO FAR\n{hist_block}\n\n" if hist_block else "",
@@ -227,6 +237,7 @@ class QaEngine:
             example_id=passages[0].id if passages else "paper-abc12345-chunk-0",
             split=f"{split}\n\n" if split else "",
             cautions=self._cautions(passages),
+            relations=format_relations(facts),
         )
 
         yield {"type": "stage", "name": "writing"}
@@ -269,6 +280,7 @@ class QaEngine:
             "verification": report,
             "stances": labels,
             "warnings": self._warnings(passages),
+            "relations": facts,
             "matches": [p.as_match() for p in passages],
             "usedNodeIds": cited or [p.id for p in passages if p.id],
         }

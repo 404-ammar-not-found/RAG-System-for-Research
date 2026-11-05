@@ -105,6 +105,7 @@ function Message({ message, isLast, streaming: busy, onSend, onRegenerate }) {
     stances = {},
     verification,
     warnings = [],
+    relations = [],
     suggestions = [],
     streaming,
     stage,
@@ -228,6 +229,21 @@ function Message({ message, isLast, streaming: busy, onSend, onRegenerate }) {
           spanMap={spanMap}
           stances={stances}
         />
+      )}
+      {!streaming && relations.length > 0 && (
+        <details className="relations">
+          <summary>
+            Relationships considered <span className="count">{relations.length}</span>
+          </summary>
+          <p className="muted">Extracted by an LLM to guide search. Only cited passages are evidence.</p>
+          <ul>
+            {relations.map((r, i) => (
+              <li key={i}>
+                {r.source} <span className="relation">{r.relation.replaceAll("_", " ")}</span> {r.target}
+              </li>
+            ))}
+          </ul>
+        </details>
       )}
       {!streaming && content && (
         <div className="msg-actions">

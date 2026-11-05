@@ -29,3 +29,4 @@ tenacity==9.1.4
 # scripts/eval_retrieval.py reads the golden set; was only installed
 # transitively via chromadb before.
 pyyaml==6.0.3
+graphifyy==0.9.102

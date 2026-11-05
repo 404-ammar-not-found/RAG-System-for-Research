@@ -22,7 +22,7 @@ export async function addArxiv(url) {
 export async function getGraph() {
   const response = await fetch("/api/graph");
   const data = await response.json().catch(() => ({}));
-  return { papers: data.papers || [], edges: data.edges || [] };
+  return { papers: data.papers || [], edges: data.edges || [], shared: data.shared || [] };
 }
 
 export async function deletePaper(file) {

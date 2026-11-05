@@ -136,3 +136,45 @@
   paper: "1502.03167"
   contains: ["scale and shift"]
   kind: definition
+
+# Relational: the answer sits one link away from what the question names, or in a
+# paper the question only describes. Written before the relation graph was built.
+- q: Which paper in this library applies a pure Transformer to sequences of image patches?
+  paper: 2010.11929v2
+  contains: ["patches"]
+  kind: relational
+
+- q: Which work adapts the Transformer encoder for language pre-training with masked tokens?
+  paper: "1810.04805"
+  contains: ["masked"]
+  kind: relational
+
+- q: Which paper makes large pre-trained language models cheaper to fine-tune through low-rank updates?
+  paper: "2106.09685"
+  contains: ["low-rank"]
+  kind: relational
+
+- q: What optimizer did the Transformer paper train with, and how does that optimizer adapt its learning rates?
+  paper: "1412.6980"
+  contains: ["adaptive"]
+  kind: relational
+
+- q: What normalization do ResNets apply after each convolution, and what problem was it originally designed to reduce?
+  paper: "1502.03167"
+  contains: ["internal covariate shift"]
+  kind: relational
+
+- q: The Transformer dropped recurrence from encoder-decoder models; which paper introduced the LSTM sequence-to-sequence design it replaced?
+  paper: "1409.3215"
+  contains: ["LSTM"]
+  kind: relational
+
+- q: Which convolutional network from 2012 did later ImageNet work such as ResNet build on, and what activation did it use?
+  paper: NIPS-2012-imagenet-classification-with-deep-convolutional-neural-networks-Paper-1
+  contains: ["ReLU"]
+  kind: relational
+
+- q: BERT and GPT-3 both descend from which attention-only architecture, and how does its multi-head attention work?
+  paper: 1706.03762v7
+  contains: ["multi-head"]
+  kind: relational

@@ -42,6 +42,10 @@ class PipelineSettings:
     # Stop one paper monopolising the results. Measured before this existed:
     # 6 of the top 8 passages for one question came from a single paper.
     max_per_source: int = 4
+    # Add a retrieval channel and prompt context from the Graphify relation map.
+    # Costs nothing per question; the LLM spend happens once per paper at ingest.
+    relation_graph: bool = True
+    relations_dir: Path = Path("cache/relations")
     # Pull prev/next chunks of the top hits so the LLM reads contiguous text.
     # Free: fetched by id, no embedding, no search.
     neighbour_expansion: bool = True

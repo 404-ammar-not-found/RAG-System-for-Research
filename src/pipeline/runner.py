@@ -9,6 +9,7 @@ from typing import Any
 
 from .ingestion import ingest_chroma, open_vectorstore
 from .qa import QaEngine
+from .relations import RelationGraph, build_graph, extract_paper, graph_path
 from .settings import PipelineSettings
 
 
@@ -20,11 +21,30 @@ class Runtime:
         self.vectordb: Any | None = None
         self.qa: QaEngine | None = None
         self._lock = asyncio.Lock()
+        self._graph_tasks: set[asyncio.Task[None]] = set()
 
     async def start(self) -> None:
         self.vectordb = await asyncio.to_thread(open_vectorstore, self.settings)
         self.qa = QaEngine(self.settings, self.vectordb)
         await asyncio.to_thread(self.qa.rebuild_bm25)
+        self.qa.relations = await asyncio.to_thread(RelationGraph.load, graph_path(self.settings))
+
+    async def _refresh_relations(self, new_pdf: Path | None = None) -> None:
+        """Update the graph without ever failing the ingest or delete that asked for it."""
+        try:
+            if new_pdf is not None:
+                await asyncio.to_thread(extract_paper, new_pdf, self.settings)
+            relations = await asyncio.to_thread(build_graph, self.settings)
+            if self.qa is not None:
+                self.qa.relations = relations
+        except Exception as exc:
+            print(f"[WARN] relation graph not updated: {str(exc)[:200]}")
+
+    def _refresh_in_background(self, new_pdf: Path | None = None) -> None:
+        # Extraction takes minutes, and retrieval works without the new links.
+        task = asyncio.create_task(self._refresh_relations(new_pdf))
+        self._graph_tasks.add(task)
+        task.add_done_callback(self._graph_tasks.discard)
 
     async def ingest(self, only: Path | None = None) -> dict[str, int]:
         """Parse each new PDF once, index it, refresh the BM25 index.
@@ -39,6 +59,8 @@ class Runtime:
             if self.qa is not None:
                 self.qa.vectordb = vectordb
                 await asyncio.to_thread(self.qa.rebuild_bm25)
+            if only is not None and chunks and self.settings.relation_graph:
+                self._refresh_in_background(only)
             return {"chunks": chunks}
 
     async def delete_paper(self, pdf: Path) -> None:
@@ -53,6 +75,8 @@ class Runtime:
             pdf.unlink()
             if self.qa is not None:
                 await asyncio.to_thread(self.qa.rebuild_bm25)
+            if self.settings.relation_graph:
+                self._refresh_in_background()
 
     async def ask(self, question: str) -> dict[str, Any]:
         if self.qa is None:

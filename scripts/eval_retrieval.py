@@ -168,6 +168,8 @@ def main() -> None:
     ap.add_argument("--full", action="store_true", help="hit the live index (costs quota)")
     ap.add_argument("--offline", action="store_true", help="default mode; accepted explicitly")
     ap.add_argument("--k", type=int, default=8)
+    ap.add_argument("--no-graph", action="store_true", help="--full without the relation channel")
+    ap.add_argument("--no-rerank", action="store_true", help="--full without the LLM reranker")
     ap.add_argument("--report-cost", action="store_true", help="projected embeds for a re-ingest")
     ap.add_argument("--baseline", type=Path, help="compare against a saved JSON report")
     ap.add_argument("--save", type=Path, help="write this report to JSON")
@@ -179,6 +181,8 @@ def main() -> None:
         chroma_path=str(REPO_ROOT / "chroma_db"),
         debug_retrieval=False,
         top_k=args.k,
+        relation_graph=not args.no_graph,
+        use_reranker=not args.no_rerank,
     )
 
     report = (

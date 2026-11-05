@@ -13,6 +13,7 @@ from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
 
 from src.pipeline.parsing import pdf_title
+from src.pipeline.relations import with_relations
 from src.pipeline.runner import Runtime
 from src.pipeline.scholarly import (
     corpus_graph,
@@ -204,9 +205,10 @@ async def bibtex() -> Response:
 
 @app.get("/api/graph")
 async def graph() -> dict[str, Any]:
-    """Corpus-internal citation map, from cached bibliographic records only."""
+    """Library map: cached bibliographic records plus the relation graph."""
     pdfs = sorted(DATA_DIR.glob("*.pdf")) if DATA_DIR.exists() else []
-    return await asyncio.to_thread(corpus_graph, pdfs)
+    base = await asyncio.to_thread(corpus_graph, pdfs)
+    return with_relations(base, runtime.qa.relations if runtime.qa else None)
 
 
 @lru_cache(maxsize=32)  # ponytail: in-memory PNG cache; move to disk past ~100 papers

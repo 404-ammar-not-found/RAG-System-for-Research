@@ -1,28 +1,46 @@
 # Research RAG Chat
 
-Ask questions across a corpus of papers in a claude.ai-style chat, with every claim
-grounded in a verbatim, machine-checked citation.
+Ask questions across a library of research papers and get answers in which every claim cites a
+verbatim passage, and every citation is machine-checked.
 
-Retrieval is Chroma passage search (cosine) fused with BM25 by reciprocal rank fusion, then
-reranked by a single listwise LLM call. Answers stream token-by-token; after synthesis every
-cited quote is checked verbatim against its passage and every sentence is verified by an
-entailment call, so fabricated or unsupported claims are flagged in the UI.
+The design rule is that **retrieved text is the only evidence**. Search, reranking and the relation
+graph decide what the model reads; none of them can make a claim count as verified.
+
+## Architecture
 
 ```
-PDF ─► section-aware parse ─► chunks ─► Chroma + BM25
+                 ┌─► parse ─► chunks ─► Chroma + BM25
+PDF ─► ingest ───┤
+                 └─► Graphify extraction ─► relation graph (cache/relations/graph.json)
 
-chat ─► condense follow-up ─┬─► dense ──┐
-                            └─► BM25 ───┴─► RRF ─► rerank ─► passages ─► stream answer ─► verify
+question ─► condense follow-up ─┬─► dense ──┐
+                                ├─► BM25 ───┼─► RRF ─► rerank ─► neighbours ─► stance check
+                                └─► graph ──┘                                       │
+                                                                                    ▼
+                  relationships (context only) ───────────────────────────► stream answer
+                                                                                    │
+                                              verify quotes and entailment ◄────────┘
 ```
 
-Multi-turn: the client sends the conversation history with each message; follow-ups are
-condensed into standalone retrieval queries by the cheap model.
+| Stage | What happens | Code |
+|---|---|---|
+| Parse | Dehyphenate and reflow PDF lines; keep tables, captions and math as typed blocks | `src/pipeline/parsing.py` |
+| Index | Sentence-aligned chunks in Chroma (cosine) and an in-memory BM25 index | `src/pipeline/ingestion.py` |
+| Bibliography | Resolve papers through arXiv, Semantic Scholar, OpenAlex and Crossref; flag retractions | `src/pipeline/scholarly.py` |
+| Relations | Merge per-paper Graphify output into one concept and citation graph | `src/pipeline/relations.py` |
+| Retrieve | Fuse the channels with reciprocal rank fusion, then one listwise LLM rerank | `src/pipeline/retrieval.py` |
+| Answer | Label disagreement between sources, then stream a cited answer | `src/pipeline/qa.py`, `stance.py` |
+| Verify | Match each quote verbatim against its passage, then run an entailment check | `src/pipeline/verification.py` |
+| Serve | FastAPI backend; React chat UI and literature map | `src/api/web_api.py`, `web-visualizer/` |
+
+Multi-turn chat is stateless on the server: the client sends the history with each message, and
+follow-ups are condensed into a standalone search query by the cheap model.
 
 ## Setup
 
 ```bash
-git clone https://github.com/AmmarNagri/Neuro-Symbolic-Multi-Agent-RAG-System-for-Research
-cd Neuro-Symbolic-Multi-Agent-RAG-System-for-Research
+git clone https://github.com/404-ammar-not-found/RAG-System-for-Research
+cd RAG-System-for-Research
 ./start.sh
 ```
 
@@ -57,8 +75,24 @@ Any one of **Gemini**, **Anthropic** or **OpenAI**. Put a key in `.env` and it i
 | local | — | — | `all-MiniLM-L6-v2` |
 
 Override any slot with `TEXT_LLM_MODEL` / `GRAPH_LLM_MODEL` / `EMBED_MODEL` in `.env` — the
-table lives in `src/pipeline/deps.py`. (`GRAPH_LLM_MODEL` is the cheap-model slot, named for the
-graph-extraction work it once also did.)
+table lives in `src/pipeline/deps.py`. `GRAPH_LLM_MODEL` is the cheap-model slot: reranking,
+stance labelling, verification and relation extraction.
+
+**Any OpenAI-compatible API** works through the `openai` provider. For GLM on Z.ai:
+
+```
+LLM_PROVIDER=openai
+OPENAI_API_KEY=<your Z.ai key>
+OPENAI_BASE_URL=https://api.z.ai/api/paas/v4
+OPENAI_API_BASE=https://api.z.ai/api/paas/v4
+TEXT_LLM_MODEL=glm-5.3
+GRAPH_LLM_MODEL=glm-5.3
+EMBED_PROVIDER=local
+```
+
+Expect slow answers with this setup: a one-sentence question took about two minutes with GLM 5.3
+in both model slots, and GLM does not always return the quoted citation format the verifier needs,
+so some answers come back `unchecked`. A faster model in `GRAPH_LLM_MODEL` is the first thing to try.
 
 ### Embedding locally
 
@@ -110,6 +144,56 @@ the whole index.
 - **Do not `pip install fitz`** — it is an unrelated PyPI package that shadows PyMuPDF's module
   name.
 
+## Relation graph
+
+Passage search finds text that resembles the question. It struggles when the answer is one link
+away, such as "what optimizer did the Transformer paper use, and how does it work?", where the
+second half lives in the Adam paper. The relation graph supplies that link.
+
+```bash
+python scripts/build_relations.py    # extract new papers, then rebuild the graph
+```
+
+**Build.** [Graphify](https://github.com/Graphify-Labs/graphify) extracts concepts and links from
+each PDF once, and the result is cached in `cache/relations/`. Papers added through the UI are
+extracted in the background. Three steps then turn those fragments into a corpus graph:
+
+- **Merge across papers.** Graphify's node ids are per-file, so the same concept in two papers would
+  never connect. Nodes are merged by normalised label. Graphify's fuzzy dedup stays off, because it
+  is tuned for code symbols and exact merging keeps SQuAD v1.1 and v2.0 apart.
+- **Find citations in the PDFs.** A paper cites another when its text contains that paper's title,
+  matched with spacing and hyphenation removed. This needs no LLM or network, and it fills gaps in
+  the OpenAlex citation data.
+- **Link references to library papers.** A reference whose label matches a library title points at
+  that paper's node rather than creating a duplicate.
+
+**Use.** A question's terms select matching concepts, and the graph adds their direct neighbours.
+That drives three things:
+
+- a `graph` retrieval channel: BM25 widened with linked concepts, limited to the papers they touch
+- a `RELATIONSHIPS` block in the prompt, which tells the model to confirm each link in the passages
+- a **Relationships considered** panel under answers, plus citations and shared concepts in the map
+
+**Trust.** Links are LLM output and are never evidence. They cannot be cited, and claims still go
+through verification. Graphify's confidence label is not used to filter links, because in testing
+it marked 61 of 62 links `EXTRACTED`, including vague ones like `conceptually_related_to`.
+
+**Cost.** Queries add no LLM calls, but extraction is expensive: the BERT paper took 6 minutes and
+about 19,000 input and 32,000 output tokens on GLM 5.3. Graphify also installs about 25 tree-sitter
+grammars that this project never uses. Without `graph.json` the app runs on dense and BM25 alone;
+set `relation_graph=False` in `PipelineSettings` to turn the feature off.
+
+**Status: not yet measured.** The code has unit tests, but the full-library extraction has not
+finished, so its effect on retrieval is unknown. Compare with:
+
+```bash
+python scripts/eval_retrieval.py --full --no-rerank --baseline reports/graph-off.json
+```
+
+The baseline, without the graph or reranker and with local embeddings, is recall@8 **0.647**
+(22/34), MRR **0.291**, and **4/8** on relational questions. Those 8 questions were written before
+the graph existed, but they were written for this feature, so treat them as a targeted check.
+
 ## Chunking
 
 A PDF has no paragraphs. Every visual line arrives as its own string, words break across
@@ -148,7 +232,8 @@ the Attention abstract into cells like `['repr', 'oduce the ta', 'bles and']`.
 ```bash
 python scripts/eval_retrieval.py --offline --report-cost   # zero API calls
 python scripts/eval_retrieval.py --full                    # costs quota
-python scripts/eval_retrieval.py --offline --baseline tests/eval/baseline.json
+python scripts/eval_retrieval.py --offline --baseline reports/final.json
+python scripts/eval_retrieval.py --full --no-graph --no-rerank   # dense + BM25, no LLM calls
 ```
 
 `--offline` scores the golden set (`tests/eval/golden.yaml`) through BM25 only and reports chunk
@@ -163,6 +248,6 @@ search cannot resolve by construction. Chunk health is the primary offline signa
 ## Tests
 
 ```bash
-python -m unittest discover -s tests    # parsing, chunking, fusion, reranking, verification
+python -m unittest discover -s tests    # parsing, retrieval, relations, verification, streaming
 cd web-visualizer && npm test           # Vitest
 ```

@@ -8,7 +8,7 @@ const GUTTER = 140;
  * ponytail: arc diagram over a year-ordered list — fine to ~40 papers; past
  * that the arcs spaghetti and a force layout earns its keep. */
 function LiteratureMap({ paperCount }) {
-  const [graph, setGraph] = useState({ papers: [], edges: [] });
+  const [graph, setGraph] = useState({ papers: [], edges: [], shared: [] });
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
@@ -31,8 +31,11 @@ function LiteratureMap({ paperCount }) {
       paper: papers.find((p) => p.file === selected),
       cites: edges.filter(([a]) => a === selected).map(([, b]) => b),
       citedBy: edges.filter(([, b]) => b === selected).map(([a]) => a),
+      shared: graph.shared
+        .filter((s) => s.a === selected || s.b === selected)
+        .map((s) => ({ file: s.a === selected ? s.b : s.a, concepts: s.concepts })),
     };
-  }, [selected, edges, papers]);
+  }, [selected, edges, papers, graph.shared]);
 
   if (!papers.length) {
     return (
@@ -97,6 +100,18 @@ function LiteratureMap({ paperCount }) {
           <h3>Cited by in library</h3>
           {detail.citedBy.length ? (
             <ul>{detail.citedBy.map((f) => <li key={f}>{titleOf(f)}</li>)}</ul>
+          ) : (
+            <p className="muted">none</p>
+          )}
+          <h3>Shares concepts with</h3>
+          {detail.shared.length ? (
+            <ul>
+              {detail.shared.map((s) => (
+                <li key={s.file}>
+                  {titleOf(s.file)}: {s.concepts.slice(0, 4).join(", ")}
+                </li>
+              ))}
+            </ul>
           ) : (
             <p className="muted">none</p>
           )}
